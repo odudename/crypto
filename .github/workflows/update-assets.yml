@@ -28,7 +28,7 @@ jobs:
         run: |
           cd wordpress-svn
           svn add --force .
-          svn commit -m "Update plugin assets (screenshots, banners, etc.)"
+          svn commit --no-auth-cache -m "Update plugin assets (screenshots, banners, etc.)"
         env:
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
