@@ -6,3 +6,4 @@
 ./block/.gitignore
 .distignore
 .gitignore
+/assets
