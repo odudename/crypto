@@ -1,0 +1,34 @@
+name: Update WordPress Plugin Assets
+
+on:
+  push:
+    paths:
+      - 'assets/**'  # Trigger only when changes occur in the assets folder
+
+jobs:
+  deploy:
+    name: Deploy Assets to WordPress.org
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      # Checkout the WordPress.org plugin repository
+      - name: Checkout WordPress.org repository
+        run: |
+          svn checkout https://plugins.svn.wordpress.org/crypto/ wordpress-svn
+          cd wordpress-svn/assets
+
+      # Copy the new assets (screenshots, banners, etc.) from GitHub to the SVN assets folder
+      - name: Copy new assets
+        run: |
+          cp -r ./assets/* wordpress-svn/assets/
+
+      # Commit and push the new/updated assets to the WordPress.org SVN assets directory
+      - name: Commit and Push Assets
+        run: |
+          cd wordpress-svn
+          svn add --force .
+          svn commit -m "Update plugin assets (screenshots, banners, etc.)"
+        env:
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
