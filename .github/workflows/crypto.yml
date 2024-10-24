@@ -1,0 +1,22 @@
+name: Deploy to WordPress.org
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  tag:
+    name: New tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      # Add the fix to mark /github/workspace as a safe directory
+      - name: Mark /github/workspace as safe
+        run: git config --global --add safe.directory /github/workspace
+
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@master
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SLUG: crypto
