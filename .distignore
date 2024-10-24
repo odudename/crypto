@@ -1,0 +1,8 @@
+/.vscode
+/.wordpress-org
+/.git
+/.github
+./block/node_modules/
+./block/.gitignore
+.distignore
+.gitignore
