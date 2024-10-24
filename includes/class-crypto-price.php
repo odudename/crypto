@@ -256,8 +256,8 @@ class Crypto_Price
 	{
 		$theme = '';
 		if ($style == 'style1') {
-			$theme = '.<div class=\"fl-columns\">';
-			$theme = '.<div class="fl-column fl-is-narrow">';
+			$theme .= '<div class="fl-columns">';
+			$theme .= '<div class="fl-column fl-is-narrow">';
 			$theme .= '<div class="fl-notification ' . $color . ' fl-pb-0 fl-pt-0">';
 			$theme .= '<p class="fl-is-size-4 fl-has-text-centered fl-mb-1"><strong>' . $data . '</strong> </p>';
 			$theme .= '<p class="fl-is-size-6 fl-has-text-centered"> <img src="' . $img . '" width="16"> ' . $id . '/' . $curr . '</p>';
@@ -265,8 +265,8 @@ class Crypto_Price
 			$theme .= "</div>";
 			$theme .= "</div>";
 		} else if ($style == 'style2') {
-			$theme = '.<div class=\"fl-columns\">';
-			$theme = '.<div class="fl-column fl-is-narrow">';
+			$theme .= '<div class="fl-columns">';
+			$theme .= '<div class="fl-column fl-is-narrow">';
 			$theme .= '<div class="fl-tag ' . $color . ' ">';
 			$theme .= '<img src="' . $img . '" width="16">&nbsp;';
 			$theme .= $data;

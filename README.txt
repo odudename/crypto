@@ -4,8 +4,8 @@ Donate link: https://odude.com
 Tags: crypto, login, metamask, NFT, Blockchain, Token
 Requires at least: 3.0.1
 Requires PHP: 5.5
-Tested up to: 6.1.1
-Stable tag: 2.11
+Tested up to: 6.6.2
+Stable tag: 2.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -80,7 +80,7 @@ You can use a shortcode to add a Metamask button that enables the addition of a 
 
 
 
-[Live Demo](https://web3yak.com/app/user-dashboard/)
+[Live Demo](https://web3domain.org/studio/wordpress-crypto-plugin/)
 
 > If any suggestion, contact at hello@web3yak.com
 
@@ -109,7 +109,7 @@ Web3Domain is a platform that allows you to register and sell your own web3 doma
 3. Crypto Price
 
 == Changelog ==
-= 2.12 =
+= 2.13 =
 * Removed Web3 Domain mint option
 
 = 2.10 = 
