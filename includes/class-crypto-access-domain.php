@@ -156,7 +156,8 @@ class Crypto_Access
                         } else {
                             console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                            if ((acc.network != '<?php echo $this->crypto_network; ?>')) {
+
+                            if ((acc.network != '<?php echo esc_js($this->crypto_network); ?>')) {
                                 var msg =
                                     "Please change your network to Polygon (MATIC). Your currently connected network is " +
                                     acc.network;

@@ -26,7 +26,9 @@ foreach ($this->sections as $section) {
 
 <div id="crypto-settings" class="wrap crypto-settings">
 
-    <h1><?php echo __('Crypto', 'crypto') . ' ' . __('Plugin Configuration', 'crypto'); ?></h1>
+
+    <h1><?php
+        echo esc_html__('Crypto', 'crypto') . ' ' . esc_html__('Plugin Configuration', 'crypto'); ?></h1>
 
     <?php settings_errors(); ?>
 
@@ -76,10 +78,10 @@ foreach ($this->sections as $section) {
     }
 
     if (count($section_links) > 1) : ?>
-    <ul class="subsubsub">
-        <li><?php echo wp_kses_post(implode(' | </li><li>', $section_links)); ?></li>
-    </ul>
-    <div class="clear"></div>
+        <ul class="subsubsub">
+            <li><?php echo wp_kses_post(implode(' | </li><li>', $section_links)); ?></li>
+        </ul>
+        <div class="clear"></div>
     <?php endif; ?>
 
     <form method="post" action="options.php">
