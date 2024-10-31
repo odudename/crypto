@@ -122,13 +122,13 @@ class Crypto_Connect_Metamask
         $fields = array('crypto_general_login' => array(
             array(
                 'name' => 'enable_crypto_login',
-                'label' => __('Select login provider', 'flexi'),
+                'label' => __('Select login provider', 'crypto'),
                 'description' => '',
                 'type' => 'radio',
                 'options' => array(
-                    //  'web3modal' => __('Connect using Web3Modal', 'flexi'),
-                    //  'moralis' => __('Connect using moralis.io API - Metamask & WalletConnect', 'flexi'),
-                    'metamask' => __('Connect using Metamask without any provider', 'flexi'),
+                    //  'web3modal' => __('Connect using Web3Modal', 'crypto'),
+                    //  'moralis' => __('Connect using moralis.io API - Metamask & WalletConnect', 'crypto'),
+                    'metamask' => __('Connect using Metamask without any provider', 'crypto'),
 
                 ),
                 'sanitize_callback' => 'sanitize_key',
@@ -236,7 +236,8 @@ class Crypto_Connect_Metamask
 
 ?>
                     <div>
-                        <a href="#" id="btn-login" class="<?php echo esc_attr($class); ?>"><img width="20" src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/metamask.svg'); ?>">&nbsp;
+                        <a href="#" id="btn-login" class="<?php echo esc_attr($class); ?>"><img width="20"
+                                src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/metamask.svg'); ?>">&nbsp;
                             <?php echo esc_attr($label); ?></a>
                         <div class="fl-notification fl-is-primary fl-is-light fl-mt-1" id="flexi_notification_box">
                             <button class="fl-delete" id="delete_notification"></button>
@@ -251,7 +252,8 @@ class Crypto_Connect_Metamask
                         crypto_state_check();
                     </script>
                     <div>
-                        <a href="#" id="btn-login" class="<?php echo esc_attr($class); ?>"><img width="20" src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/metamask.svg'); ?>">&nbsp;
+                        <a href="#" id="btn-login" class="<?php echo esc_attr($class); ?>"><img width="20"
+                                src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/metamask.svg'); ?>">&nbsp;
                             <?php echo esc_attr($label); ?></a>
                         <div class="fl-notification fl-is-primary fl-is-light fl-mt-1" id="flexi_notification_box">
                             <button class="fl-delete" id="delete_notification"></button>
@@ -460,7 +462,8 @@ class Crypto_Connect_Metamask
                 <div class="wrap">
                     <b>This plugin connects to your MetaMask or other cryptocurrency wallet. Once connected, the user will be
                         automatically logged in without the need for registration.</b>
-                    <br><br><a class="button button-primary" href="<?php echo admin_url('admin.php?page=crypto_settings&tab=login&section=crypto_general_login'); ?>">Login
+                    <br><br><a class="button button-primary"
+                        href="<?php echo admin_url('admin.php?page=crypto_settings&tab=login&section=crypto_general_login'); ?>">Login
                         Settings</a>
                     <br><br>
                     <b>Tips</b>

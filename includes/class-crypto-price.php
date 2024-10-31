@@ -181,28 +181,28 @@ class Crypto_Price
 				),
 				array(
 					'name'              => 'theme',
-					'label'             => __('Theme Style', 'flexi'),
+					'label'             => __('Theme Style', 'crypto'),
 					'description'       => '',
 					'type'              => 'radio',
 					'options'           => array(
-						'none'   => __('None', 'flexi'),
-						'style1' => __('Style 1', 'flexi'),
+						'none'   => __('None', 'crypto'),
+						'style1' => __('Style 1', 'crypto'),
 					),
 					'sanitize_callback' => 'sanitize_key',
 				),
 				array(
 					'name'              => 'theme_color',
-					'label'             => __('Theme Color', 'flexi'),
+					'label'             => __('Theme Color', 'crypto'),
 					'description'       => '',
 					'type'              => 'radio',
 					'options'           => array(
-						''   => __('Default', 'flexi'),
-						'fl-is-primary' => __('Primary', 'flexi'),
-						'fl-is-link'     => __('Link', 'flexi'),
-						'fl-is-info'     => __('Information', 'flexi'),
-						'fl-is-success'     => __('Success', 'flexi'),
-						'fl-is-warning'     => __('Warning', 'flexi'),
-						'fl-is-danger'     => __('Danger', 'flexi'),
+						''   => __('Default', 'crypto'),
+						'fl-is-primary' => __('Primary', 'crypto'),
+						'fl-is-link'     => __('Link', 'crypto'),
+						'fl-is-info'     => __('Information', 'crypto'),
+						'fl-is-success'     => __('Success', 'crypto'),
+						'fl-is-warning'     => __('Warning', 'crypto'),
+						'fl-is-danger'     => __('Danger', 'crypto'),
 
 					),
 					'sanitize_callback' => 'sanitize_key',
@@ -362,29 +362,29 @@ class Crypto_Price
 	{
 		ob_start();
 ?>
-<div class="changelog section-getting-started">
-    <div class="feature-section">
-        <h2>Price Display</h2>
-        <div class="wrap">
-            <b>The "Crypto" plugin enables users to display current cryptocurrency prices in various currencies.</b>
-            <br><br><a class="button button-primary"
-                href="<?php echo admin_url('admin.php?page=crypto_settings&tab=price&section=crypto_price_settings'); ?>">Price
-                Display Settings</a>
-            <a class="button button-primary" target="_blank" href="https://web3domain.org/studio/search-domain/">Live
-                Demo</a>
-            <br><br>
-            <b>Tips</b>
-            <ul>
-                <li>* Obtain an API key from CoinMarketCap.com, which is free to acquire.</li>
-                <li>* Initially set the 'Crypto Data Caching' time to 1 second. Once it is working well, increase it as
-                    needed. This will save bandwidth and improve speed.</li>
-                <li>* To display prices within an article, use the 'none' style. This will not disrupt the paragraph's
-                    formatting.</li>
-            </ul>
+		<div class="changelog section-getting-started">
+			<div class="feature-section">
+				<h2>Price Display</h2>
+				<div class="wrap">
+					<b>The "Crypto" plugin enables users to display current cryptocurrency prices in various currencies.</b>
+					<br><br><a class="button button-primary"
+						href="<?php echo admin_url('admin.php?page=crypto_settings&tab=price&section=crypto_price_settings'); ?>">Price
+						Display Settings</a>
+					<a class="button button-primary" target="_blank" href="https://web3domain.org/studio/search-domain/">Live
+						Demo</a>
+					<br><br>
+					<b>Tips</b>
+					<ul>
+						<li>* Obtain an API key from CoinMarketCap.com, which is free to acquire.</li>
+						<li>* Initially set the 'Crypto Data Caching' time to 1 second. Once it is working well, increase it as
+							needed. This will save bandwidth and improve speed.</li>
+						<li>* To display prices within an article, use the 'none' style. This will not disrupt the paragraph's
+							formatting.</li>
+					</ul>
 
-        </div>
-    </div>
-</div>
+				</div>
+			</div>
+		</div>
 <?php
 		$content = ob_get_clean();
 		return $content;
