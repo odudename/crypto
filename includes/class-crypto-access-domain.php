@@ -156,7 +156,6 @@ class Crypto_Access
                         } else {
                             console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-
                             if ((acc.network != '<?php echo esc_js($this->crypto_network); ?>')) {
                                 var msg =
                                     "Please change your network to Polygon (MATIC). Your currently connected network is " +
@@ -224,7 +223,7 @@ class Crypto_Access
                                     if (count == 0) {
                                         console.log("zero domain");
                                         jQuery("[id=crypto_msg_ul]").append(
-                                                "<li>Your wallet do not have <?php echo "." . $this->domain_name; ?> Domain. <strong>Account restricted.</strong> </li>"
+                                                "<li>Your wallet do not have <?php echo "." . esc_html($this->domain_name); ?> Domain. <strong>Account restricted.</strong> </li>"
                                             )
                                             .fadeIn("normal");
                                         create_link_crypto_connect_login('<?php echo sanitize_key($nonce); ?>', '', 'savenft',
@@ -250,16 +249,16 @@ class Crypto_Access
                 ?>
 
                     <div class="fl-tags fl-has-addons">
-                        <span class="fl-tag">Account Status (<?php echo $current_user->user_login; ?>)</span>
-                        <span class="fl-tag fl-is-primary"><?php echo "." . $this->domain_name; ?> sub-name holder</span>
+                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user->user_login); ?>)</span>
+                        <span class="fl-tag fl-is-primary"><?php echo esc_html("." . $this->domain_name); ?> sub-name holder</span>
                     </div>
                 <?php
                 } else {
                 ?>
 
                     <div class="fl-tags fl-has-addons">
-                        <span class="fl-tag">Account Status (<?php echo $current_user->user_login; ?>)</span>
-                        <span class="fl-tag fl-is-danger"><?php echo "." . $this->domain_name; ?> sub-domain required</span>
+                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user->user_login); ?>)</span>
+                        <span class="fl-tag fl-is-danger"><?php echo esc_html("." . $this->domain_name); ?> sub-domain required</span>
                     </div>
                 <?php
                 }
@@ -270,12 +269,11 @@ class Crypto_Access
                     <div class="fl-message-body">
 
                         Some content or pages on the site are exclusively available to members who possess a sub-name of the
-                        <b><?php echo "." . $this->domain_name; ?></b> primary ODude<br>
+                        <b><?php echo esc_html("." . $this->domain_name); ?></b> primary ODude<br>
                         <?php if ($this->mint_page != "") {
-                            echo '<a href="' . $this->mint_page . '" target="_blank">' . $this->mint_page . '</a>';
+                            echo '<a href="' . esc_url($this->mint_page) . '" target="_blank">' . esc_html($this->mint_page) . '</a>';
                         }
                         ?>
-
                     </div>
                 </div>
 
@@ -284,16 +282,14 @@ class Crypto_Access
                         <p>Available domains/name into polygon chain</p>
                     </div>
                     <div class="fl-message-body" id="crypto_msg_body">
-                        <ul id="crypto_msg_ul">
-
-                        </ul>
+                        <ul id="crypto_msg_ul"></ul>
                     </div>
                 </div>
 
                 <div>
                     <a href="#" id="check_domain" onclick="location.reload();" class="fl-button fl-is-link fl-is-light">Verify the
                         presence of the
-                        <?php echo "." . $this->domain_name; ?> ODude Name in your wallet</a>
+                        <?php echo esc_html("." . $this->domain_name); ?> ODude Name in your wallet</a>
                 </div>
             <?php
             } else {
