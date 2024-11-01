@@ -368,7 +368,7 @@ class Crypto_Price
 				<div class="wrap">
 					<b>The "Crypto" plugin enables users to display current cryptocurrency prices in various currencies.</b>
 					<br><br><a class="button button-primary"
-						href="<?php echo admin_url('admin.php?page=crypto_settings&tab=price&section=crypto_price_settings'); ?>">Price
+						href="<?php echo esc_url(admin_url('admin.php?page=crypto_settings&tab=price&section=crypto_price_settings')); ?>">Price
 						Display Settings</a>
 					<a class="button button-primary" target="_blank" href="https://web3domain.org/studio/search-domain/">Live
 						Demo</a>

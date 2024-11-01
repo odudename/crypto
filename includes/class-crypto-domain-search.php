@@ -209,9 +209,10 @@ class Crypto_Domain_Search
                 } else {
                     console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                    if ((acc.network != '<?php echo $this->crypto_network; ?>')) {
+                    if ((acc.network != '<?php echo esc_js($this->crypto_network); ?>')) {
                         var msg =
-                            "Please change your network to " + crypto_network_arr['<?php echo $this->crypto_network; ?>'] +
+                            "Please change your network to " + crypto_network_arr[
+                                '<?php echo esc_js($this->crypto_network); ?>'] +
                             ". Your currently connected network is " +
                             acc.network;
                         // jQuery("[id=crypto_msg_ul]").empty();
@@ -248,7 +249,7 @@ class Crypto_Domain_Search
 
                             }
                             console.log(contract);
-                            var primary_domain = '<?php echo $this->primary_domain; ?>';
+                            var primary_domain = '<?php echo esc_js($this->primary_domain); ?>';
                             console.log(primary_domain);
                             persons.length = 0;
                             var domain_found = 0;
@@ -263,7 +264,7 @@ class Crypto_Domain_Search
 
 
 
-                                        var domain_info_url = new URL("<?php echo $this->info_page; ?>");
+                                        var domain_info_url = new URL("<?php echo esc_url($this->info_page); ?>");
                                         //console.log(domain_info_url);
                                         domain_info_url.searchParams.append('domain', domain_name)
                                         // jQuery("#crypto_domain_info_url").attr("href", domain_info_url);
@@ -320,28 +321,33 @@ class Crypto_Domain_Search
             <div class="fl-column fl-is-three-quarters">
 
                 <div class="fl-buttons fl-has-addons">
-                    <a href="<?php echo $this->search_page; ?>" class="fl-button">Search</a>
-                    <a href="<?php echo $this->market_page; ?>" class="fl-button  fl-is-success fl-is-selected">My Domains</a>
+                    <a href="<?php echo esc_url($this->search_page); ?>" class="fl-button">Search</a>
+                    <a href="<?php echo esc_url($this->market_page); ?>" class="fl-button  fl-is-success fl-is-selected">My
+                        Domains</a>
                 </div>
             </div>
             <div class="fl-column">
-                <div id="crypto_wallet_address" class="fl-tag fl-is-warning"><img src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="15"></div>
+                <div id="crypto_wallet_address" class="fl-tag fl-is-warning"><img
+                        src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="15"></div>
             </div>
 
         </div>
         <nav class="fl-panel fl-has-background-white">
             <p class="fl-panel-heading">
-                My [.<?php echo $this->primary_domain; ?>] Domain Names
+                My [.<?php echo esc_html($this->primary_domain); ?>] Domain Names
             </p>
             <div class="fl-panel-block">
                 <p class="fl-control fl-has-icons-left">
-                    <input class="fl-input fl-is-rounded" type="text" placeholder="Search My Domain" id="crypto_domain_filter" style="width:90%">
+                    <input class="fl-input fl-is-rounded" type="text" placeholder="Search My Domain" id="crypto_domain_filter"
+                        style="width:90%">
                     <span class="fl-icon fl-is-left">
                         <i class="fas fa-search" aria-hidden="true"></i>
                     </span>
                 </p>
             </div>
-            <div class="fl-panel-block fl-is-active" id="crypto_loading"><span class="fl-panel-icon"><i class="fas fa-book" aria-hidden="true"></i></span> <img src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/load.gif'); ?>">
+            <div class="fl-panel-block fl-is-active" id="crypto_loading"><span class="fl-panel-icon"><i class="fas fa-book"
+                        aria-hidden="true"></i></span> <img
+                    src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/load.gif'); ?>">
             </div>
 
             <div id="crypto_domain_result" class="fl-columns fl-is-multiline">
@@ -386,8 +392,9 @@ class Crypto_Domain_Search
             <div class="fl-column fl-is-three-quarters">
 
                 <div class="fl-buttons fl-has-addons">
-                    <a href="<?php echo $this->search_page; ?>" class="fl-button fl-is-success fl-is-selected">Search</a>
-                    <a href="<?php echo $this->market_page; ?>" class="fl-button">My Domains</a>
+                    <a href="<?php echo esc_url($this->search_page); ?>"
+                        class="fl-button fl-is-success fl-is-selected">Search</a>
+                    <a href="<?php echo esc_url($this->market_page); ?>" class="fl-button">My Domains</a>
                 </div>
             </div>
             <div class="fl-column">
@@ -401,7 +408,8 @@ class Crypto_Domain_Search
 
         <div class="fl-field fl-has-addons">
             <div class="fl-control fl-is-expanded">
-                <input class="fl-input fl-is-large" type="text" placeholder="Search names or addresses" id="crypto_search_domain" style="position:unset">
+                <input class="fl-input fl-is-large" type="text" placeholder="Search names or addresses"
+                    id="crypto_search_domain" style="position:unset">
             </div>
             <div class="fl-control">
                 <a class="fl-button fl-is-info fl-is-large" id="crypto_search">
@@ -418,7 +426,8 @@ class Crypto_Domain_Search
             </header>
             <div class="fl-card-content">
                 <div class="fl-content" id="crypto_domain_result_box">
-                    <div id="crypto_loading" style="text-align:center;"> <img src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="100">
+                    <div id="crypto_loading" style="text-align:center;"> <img
+                            src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="100">
                     </div>
                     <article class="fl-message fl-is-primary" id="crypto_available">
                         <div class="fl-message-body">
@@ -434,7 +443,8 @@ class Crypto_Domain_Search
                         <div class="fl-message-body">
                             <div class="fl-tags fl-has-addons">
                                 <span class="fl-tag fl-is-large" id="crypto_domain_name">Domain Name</span>
-                                <span class="fl-tag fl-is-danger fl-is-large" id="crypto_domain_name_unavailable">Unavailable</span>
+                                <span class="fl-tag fl-is-danger fl-is-large"
+                                    id="crypto_domain_name_unavailable">Unavailable</span>
 
                             </div>
                         </div>
@@ -464,9 +474,8 @@ class Crypto_Domain_Search
                     jQuery("#crypto_loading").show();
 
                     var str = jQuery("#crypto_search_domain").val();
-                    // var result = str.replace(".<?php echo   $this->primary_domain; ?>", "");
-                    let result = str.includes(".<?php echo $this->primary_domain; ?>");
-                    var final_domain = str + ".<?php echo $this->primary_domain; ?>";
+                    let result = str.includes(".<?php echo esc_js($this->primary_domain); ?>");
+                    var final_domain = str + ".<?php echo esc_js($this->primary_domain); ?>";
                     if (result) {
                         final_domain = str;
                     }
@@ -511,10 +520,10 @@ class Crypto_Domain_Search
                             jQuery("#crypto_loading").show();
                             console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                            if ((acc.network != '<?php echo $this->crypto_network; ?>')) {
+                            if ((acc.network != '<?php echo esc_js($this->crypto_network); ?>')) {
                                 var msg =
                                     "Please change your network to " + crypto_network_arr[
-                                        '<?php echo $this->crypto_network; ?>'] +
+                                        '<?php echo esc_js($this->crypto_network); ?>'] +
                                     ". Your currently connected network is " +
                                     acc.network;
                                 jQuery('#json_container').html(
@@ -547,10 +556,12 @@ class Crypto_Domain_Search
                                     if (typeof domain_id !== 'undefined') {
                                         if (acc.network == '137') {
                                             jQuery("#crypto_blockchain_url").attr("href",
-                                                "<?php echo CRYPTO_POLYGON_URL; ?>" + domain_id);
+                                                "<?php echo esc_url(CRYPTO_POLYGON_URL); ?>" + domain_id
+                                            );
                                         } else {
                                             jQuery("#crypto_blockchain_url").attr("href",
-                                                "<?php echo CRYPTO_FILECOIN_URL; ?>" + domain_id);
+                                                "<?php echo esc_url(CRYPTO_FILECOIN_URL); ?>" +
+                                                domain_id);
                                         }
                                         //console.log(domain_id);
 
@@ -566,13 +577,16 @@ class Crypto_Domain_Search
                                         jQuery("#crypto_manage_domain").show();
                                         jQuery("#crypto_ipfs_domain").show();
                                         jQuery("#crypto_manage_domain").attr("href",
-                                            "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                            "<?php echo esc_url(get_site_url()); ?>/web3/" +
+                                            final_domain +
                                             "/?domain=manage");
                                         jQuery("#crypto_ipfs_domain").attr("href",
-                                            "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                            "<?php echo esc_url(get_site_url()); ?>/web3/" +
+                                            final_domain +
                                             "/");
 
-                                        var domain_info_url = new URL("<?php echo $this->info_page; ?>");
+                                        var domain_info_url = new URL(
+                                            "<?php echo esc_url($this->info_page); ?>");
                                         //console.log(domain_info_url);
                                         domain_info_url.searchParams.append('domain', final_domain)
                                         jQuery("#crypto_domain_info_url").attr("href", domain_info_url);
@@ -584,7 +598,8 @@ class Crypto_Domain_Search
                                         jQuery("#crypto_available").show();
                                         jQuery("#crypto_loading").hide();
                                         jQuery("#crypto_register_domain").attr("href",
-                                            "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                            "<?php echo esc_url(get_site_url()); ?>/web3/" +
+                                            final_domain +
                                             "/?domain=manage");
                                         jQuery("#crypto_domain_info_url").hide();
                                         jQuery("#crypto_ipfs_domain").hide();
@@ -620,7 +635,7 @@ class Crypto_Domain_Search
                                 jQuery("#crypto_loading").hide();
                                 jQuery("#crypto_available").show();
                                 jQuery("#crypto_register_domain").attr("href",
-                                    "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                    "<?php echo esc_url(get_site_url()); ?>/web3/" + final_domain +
                                     "/?domain=manage");
                                 jQuery("#crypto_domain_info_url").hide();
                                 jQuery("#crypto_ipfs_domain").hide();
@@ -635,13 +650,13 @@ class Crypto_Domain_Search
                                 jQuery("#crypto_manage_domain").show();
                                 jQuery("#crypto_ipfs_domain").show();
                                 jQuery("#crypto_manage_domain").attr("href",
-                                    "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                    "<?php echo esc_url(get_site_url()); ?>/web3/" + final_domain +
                                     "/?domain=manage");
                                 jQuery("#crypto_ipfs_domain").attr("href",
-                                    "<?php echo get_site_url(); ?>/web3/" + final_domain +
+                                    "<?php echo esc_url(get_site_url()); ?>/web3/" + final_domain +
                                     "/");
 
-                                var domain_info_url = new URL("<?php echo $this->info_page; ?>");
+                                var domain_info_url = new URL("<?php echo esc_url($this->info_page); ?>");
                                 //console.log(domain_info_url);
                                 domain_info_url.searchParams.append('domain', final_domain)
                                 jQuery("#crypto_domain_info_url").attr("href", domain_info_url);
@@ -685,7 +700,8 @@ class Crypto_Domain_Search
                     <b>Register your primary top-level domain (TLD) Web3 Domain Name on Web3Yak.com and begin selling
                         subdomains of it.</b>
                     <hr>
-                    <a class="button button-primary" href="<?php echo admin_url('admin.php?page=crypto_settings&tab=marketplace&section=crypto_marketplace_settings'); ?>">Manage
+                    <a class="button button-primary"
+                        href="<?php echo esc_url(admin_url('admin.php?page=crypto_settings&tab=marketplace&section=crypto_marketplace_settings')); ?>">Manage
                         Marketplace</a>
                     <a class="button button-primary" target="_blank" href="https://web3domain.org/studio/">More Information</a>
                     <a class="button button-primary" target="_blank" href="https://web3domain.org/studio/search-domain/">Live

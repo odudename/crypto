@@ -450,8 +450,6 @@ class Crypto_Connect_Metamask
 
         echo $put;
     }
-
-
     public function crypto_dashboard_content()
     {
         ob_start();
@@ -463,7 +461,7 @@ class Crypto_Connect_Metamask
                     <b>This plugin connects to your MetaMask or other cryptocurrency wallet. Once connected, the user will be
                         automatically logged in without the need for registration.</b>
                     <br><br><a class="button button-primary"
-                        href="<?php echo admin_url('admin.php?page=crypto_settings&tab=login&section=crypto_general_login'); ?>">Login
+                        href="<?php echo esc_url(admin_url('admin.php?page=crypto_settings&tab=login&section=crypto_general_login')); ?>">Login
                         Settings</a>
                     <br><br>
                     <b>Tips</b>

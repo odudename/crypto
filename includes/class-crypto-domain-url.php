@@ -92,7 +92,7 @@ class Crypto_Domain_URL
     public function crypto_my_must_login()
     {
         crypto_log("logout....");
-        echo __('Login Please !', 'crypto');
+        echo esc_html(__('Login Please !', 'crypto'));
         die();
         wp_die();
     }
@@ -145,15 +145,15 @@ class Crypto_Domain_URL
 
         <div class="fl-columns">
             <div class="fl-column fl-is-three-quarters">
-
                 <div class="fl-buttons fl-has-addons">
-                    <a href="<?php echo $this->search_page; ?>" class="fl-button ">Search</a>
-                    <a href="<?php echo $this->market_page; ?>" class="fl-button">My Domains</a>
+                    <a href="<?php echo esc_url($this->search_page); ?>" class="fl-button">Search</a>
+                    <a href="<?php echo esc_url($this->market_page); ?>" class="fl-button">My Domains</a>
                     <a href="#" class="fl-button fl-is-success fl-is-selected">Manage Domain</a>
                 </div>
             </div>
             <div class="fl-column">
-                <div id="crypto_wallet_address" class="fl-tag fl-is-warning"><img src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="15"></div>
+                <div id="crypto_wallet_address" class="fl-tag fl-is-warning"><img
+                        src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="15"></div>
             </div>
 
         </div>
@@ -166,7 +166,8 @@ class Crypto_Domain_URL
             </header>
             <div class="fl-card-content">
                 <div class="fl-content" id="crypto_domain_result_box">
-                    <div id="crypto_loading" style="text-align:center;"> <img src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="100">
+                    <div id="crypto_loading" style="text-align:center;"> <img
+                            src="<?php echo esc_url(CRYPTO_PLUGIN_URL . '/public/img/loading.gif'); ?>" width="100">
                     </div>
 
                     <div id="crypto_loading_url" style="text-align:center;"> Please wait, redirection in progress...
@@ -214,7 +215,7 @@ class Crypto_Domain_URL
                             jQuery(document).ready(function() {
                                 jQuery("#crypto_unavailable").hide();
                                 jQuery("#crypto_loading_url").hide();
-                                jQuery("[id=crypto_domain_name]").html('<?php echo $subdomain; ?>');
+                                jQuery("[id=crypto_domain_name]").html('<?php echo esc_html($subdomain); ?>');
                                 jQuery("#transfer_box").hide();
                                 jQuery("#crypto_claim_box").hide();
                                 jQuery("#record_box").hide();
@@ -257,10 +258,10 @@ class Crypto_Domain_URL
                                         jQuery("#crypto_loading").show();
                                         console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                                        if ((acc.network != '<?php echo $this->crypto_network; ?>')) {
+                                        if ((acc.network != '<?php echo esc_js($this->crypto_network); ?>')) {
                                             var msg =
                                                 "Please change your network to " + crypto_network_arr[
-                                                    '<?php echo $this->crypto_network; ?>'] +
+                                                    '<?php echo esc_js($this->crypto_network); ?>'] +
                                                 ". Your currently connected network is " +
                                                 acc.network;
                                             jQuery('#json_container').html(
@@ -287,7 +288,7 @@ class Crypto_Domain_URL
 
                                                 // getBalance(account);
                                                 await crypto_sleep(1000);
-                                                var domain_id = await getId('<?php echo $subdomain; ?>');
+                                                var domain_id = await getId("<?php echo esc_js($subdomain); ?>");
                                                 jQuery('#json_container').html('Checking ownership...');
                                                 if (typeof domain_id !== 'undefined') {
                                                     console.log(domain_id);
@@ -305,8 +306,7 @@ class Crypto_Domain_URL
                                                         jQuery("#crypto_manage_tab").show();
                                                         jQuery('#json_container').html('');
                                                         var method_url =
-                                                            '<?php echo sanitize_text_field($_GET['domain']); ?>';
-
+                                                            '<?php echo esc_js($_GET['domain']); ?>';
                                                         console.log("Manage: " + method_url);
                                                         if (method_url == 'record') {
                                                             jQuery("#record_box").show();
@@ -362,7 +362,7 @@ class Crypto_Domain_URL
                                                             console.log('Ready to publish');
 
                                                             var claim_url =
-                                                                '<?php echo $this->get_cid_domain(strtolower($subdomain)); ?>';
+                                                                '<?php echo esc_js($this->get_cid_domain(strtolower($subdomain))); ?>';
                                                             console.log(claim_url);
                                                             var TokenURI = await setTokenURI(domain_id, claim_url);
                                                             if (TokenURI == true) {
@@ -372,12 +372,12 @@ class Crypto_Domain_URL
                                                                 jQuery('#json_container').html(
                                                                     '<div class="crypto_alert-box crypto_success">Successfully published to  blockchain</strong></div>'
                                                                 );
-                                                                update_api('<?php echo $subdomain; ?>');
+                                                                update_api('<?php echo esc_js($subdomain); ?>');
 
                                                                 create_link_crypto_connect_login(
                                                                     '<?php echo sanitize_key($nonce); ?>', '',
                                                                     'crypto_delete_json',
-                                                                    '<?php echo $subdomain; ?>',
+                                                                    '<?php echo esc_js($subdomain); ?>',
                                                                     'a', 'b');
                                                                 //  console.log(persons);
                                                                 setTimeout(function() {
@@ -454,7 +454,7 @@ class Crypto_Domain_URL
                                         jQuery("#crypto_loading").show();
                                         console.log("Connected to:" + acc.addr + "\n Network:" + acc.network);
 
-                                        if ((acc.network != '<?php echo $this->crypto_network; ?>')) {
+                                        if ((acc.network != '<?php echo esc_js($this->crypto_network); ?>')) {
                                             var msg =
                                                 "Please change your network to Polygon (MATIC). Your currently connected network is " +
                                                 acc.network;
@@ -478,11 +478,12 @@ class Crypto_Domain_URL
                                                 await crypto_sleep(1000);
 
                                                 var claim_id = crypto_uniqueId();
-                                                var claim_name = '<?php echo $subdomain; ?>';
+                                                var claim_name = "<?php echo esc_js($subdomain); ?>";
+
                                                 var claim_url =
-                                                    '<?php echo $uploaddir['baseurl'] . '/yak/' . $subdomain . '.json'; ?>';
+                                                    '<?php echo esc_js($uploaddir['baseurl'] . '/yak/' . $subdomain . '.json'); ?>';
                                                 var claim_transfer_to = account;
-                                                var amount = "<?php echo  $this->price_ether; ?>";
+                                                var amount = <?php echo esc_js($this->price_ether); ?>;
                                                 var domain_claim = await claim(claim_id, claim_name, claim_url,
                                                     claim_transfer_to, amount);
                                                 jQuery('#json_container').html('Claim Started...');
@@ -520,13 +521,13 @@ class Crypto_Domain_URL
                         <div class="fl-tabs fl-is-boxed" id="crypto_manage_tab">
                             <ul>
                                 <li id="crypto_tab_transfer" class="fl-is-active">
-                                    <a href="<?php echo get_site_url() . '/web3/' . $subdomain . '/?domain=transfer'; ?>">
+                                    <a href="<?php echo esc_url(get_site_url() . '/web3/' . $subdomain . '/?domain=transfer'); ?>">
                                         <span class="fl-icon fl-is-small"><i class="fas fa-exchange-alt" aria-hidden="true"></i></span>
                                         <span>Transfer</span>
                                     </a>
                                 </li>
                                 <li id="crypto_tab_record" class="">
-                                    <a href="<?php echo get_site_url() . '/web3/' . $subdomain . '/?domain=record'; ?>">
+                                    <a href="<?php echo esc_url(get_site_url() . '/web3/' . $subdomain . '/?domain=record'); ?>">
                                         <span class="fl-icon fl-is-small"><i class="fas fa-pen" aria-hidden="true"></i></span>
                                         <span>Record</span>
                                     </a>
@@ -539,10 +540,11 @@ class Crypto_Domain_URL
                             <div class="fl-column fl-is-full">
                                 <div class="fl-box">
                                     <div class="fl-field">
-                                        <label class="fl-label">Transfer the Web3Domain "<?php echo $subdomain; ?>" to another
+                                        <label class="fl-label">Transfer the Web3Domain "<?php echo esc_html($subdomain); ?>" to another
                                             wallet</label>
                                         <div class="fl-control">
-                                            <input class="fl-input" id="to_add" placeholder="e.g. 0xf11a4fac7b7839771da0a526145198e99d0575be">
+                                            <input class="fl-input" id="to_add"
+                                                placeholder="e.g. 0xf11a4fac7b7839771da0a526145198e99d0575be">
                                         </div>
                                     </div>
                                     <p class="fl-help fl-is-success">
@@ -568,7 +570,7 @@ class Crypto_Domain_URL
 
 
                                     <div class="fl-field">
-                                        <label class="fl-label">Create a Web3Domain Name : <?php echo $subdomain; ?></label>
+                                        <label class="fl-label">Create a Web3Domain Name : <?php echo esc_html($subdomain); ?></label>
 
                                     </div>
                                     <p class="fl-help fl-is-success">
@@ -593,9 +595,10 @@ class Crypto_Domain_URL
 
                         ?>
 
-                        <form id="crypto-record-form" class="crypto_ajax_record" method="post" action="<?php echo admin_url("/admin-ajax.php"); ?>">
+                        <form id="crypto-record-form" class="crypto_ajax_record" method="post"
+                            action="<?php echo esc_url(admin_url("/admin-ajax.php")); ?>">
                             <input type="hidden" name="action" value="crypto_ajax_record">
-                            <input type="hidden" name="domain_name" value="<?php echo $subdomain; ?>">
+                            <input type="hidden" name="domain_name" value="<?php echo esc_html($subdomain); ?>">
                             <input type="hidden" name="crypto_addr" id="crypto_addr">
                             <?php wp_nonce_field('crypto-nonce', 'crypto-nonce', false); ?>
                             <div id="record_box">
@@ -604,7 +607,9 @@ class Crypto_Domain_URL
                                         <div class="fl-field">
                                             <label class="fl-label">Profile Name</label>
                                             <div class="fl-control fl-has-icons-left fl-has-icons-right">
-                                                <input class="fl-input" type="text" placeholder="Public display name" name="crypto_profile_name" value="<?php echo $gen_json->fetch($subdomain, 'name'); ?>">
+                                                <input class="fl-input" type="text" placeholder="Public display name"
+                                                    name="crypto_profile_name"
+                                                    value="<?php echo esc_attr($gen_json->fetch($subdomain, 'name')); ?>">
                                                 <span class="fl-icon fl-is-small is-left">
                                                     <i class="fas fa-user"></i>
                                                 </span>
@@ -614,7 +619,9 @@ class Crypto_Domain_URL
                                         <div class="fl-field">
                                             <label class="fl-label">Web3 Domain hosting URL</label>
                                             <div class="fl-control fl-has-icons-left fl-has-icons-right">
-                                                <input class="fl-input fl-is-success" type="text" placeholder="http://" name="crypto_website_url" value="<?php echo $gen_json->fetch($subdomain, 'web_url'); ?>">
+                                                <input class="fl-input fl-is-success" type="text" placeholder="http://"
+                                                    name="crypto_website_url"
+                                                    value="<?php echo esc_attr($gen_json->fetch($subdomain, 'web_url')); ?>">
                                                 <span class="fl-icon fl-is-small is-left">
                                                     <i class="fas fa-link"></i>
                                                 </span>
@@ -622,13 +629,15 @@ class Crypto_Domain_URL
                                             </div>
                                             <p class="fl-help fl-is-success">
                                                 Please provide the complete HTTP URL that you would like to associate with the redirect
-                                                for when someone visits <b><?php echo $subdomain; ?></b></p>
+                                                for when someone visits <b><?php echo esc_html($subdomain); ?></b></p>
                                         </div>
 
                                         <div class="fl-field">
                                             <label class="fl-label">Email Address</label>
                                             <div class="fl-control fl-has-icons-left fl-has-icons-right">
-                                                <input class="fl-input" type="email" value="<?php echo $gen_json->fetch($subdomain, 'email'); ?>" name="crypto_email">
+                                                <input class="fl-input" type="email"
+                                                    value="<?php echo esc_attr($gen_json->fetch($subdomain, 'email')); ?>"
+                                                    name="crypto_email">
                                                 <span class="fl-icon fl-is-small is-left">
                                                     <i class="fas fa-envelope"></i>
                                                 </span>
@@ -641,7 +650,9 @@ class Crypto_Domain_URL
                                         <div class="fl-field">
                                             <label class="fl-label">Description</label>
                                             <div class="fl-control">
-                                                <textarea class="fl-textarea" placeholder="About yourself , Company, Bank details / Communication Address / Notice" name="crypto_desp"> <?php echo $gen_json->fetch($subdomain, 'notes'); ?></textarea>
+                                                <textarea class="fl-textarea"
+                                                    placeholder="About yourself , Company, Bank details / Communication Address / Notice"
+                                                    name="crypto_desp"> <?php echo esc_textarea($gen_json->fetch($subdomain, 'notes')); ?></textarea>
                                             </div>
                                         </div>
 
@@ -650,7 +661,8 @@ class Crypto_Domain_URL
 
                                         <div class="fl-field fl-is-grouped">
                                             <div class="fl-control">
-                                                <button type="submit" name="submit" id="crypto_save_record" class="fl-button fl-is-link">Save Draft</button>
+                                                <button type="submit" name="submit" id="crypto_save_record"
+                                                    class="fl-button fl-is-link">Save Draft</button>
 
                                             </div>
                                             <?php
@@ -687,11 +699,12 @@ class Crypto_Domain_URL
                         <script>
                             jQuery(document).ready(function() {
                                 jQuery("#crypto_unavailable").hide();
-                                crypto_check_w3d_name_json('<?php echo $subdomain; ?>');
+                                crypto_check_w3d_name_json('<?php echo esc_html($subdomain); ?>');
 
                                 function crypto_check_w3d_name_json(domain_name) {
                                     jQuery("[id=crypto_domain_name]").html(domain_name + "");
-                                    fetch('https://web3domain.org/endpoint/v1/index.php?domain=' + domain_name + '&' + Math.random())
+                                    fetch('https://web3domain.org/endpoint/v1/index.php?domain=' + domain_name + '&' + Math
+                                            .random())
                                         .then(res => res.json())
                                         .then((out) => {
                                             console.log('Output: ', out);

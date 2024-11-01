@@ -150,8 +150,9 @@ class Crypto_Block
 
 	public function add_meta_box_callback()
 	{
-		if (isset($this->config['description']))
-			echo '<div class="rwp-description">' . $this->config['description'] . '</div>';
+		if (isset($this->config['description'])) {
+			echo '<div class="rwp-description">' . esc_html($this->config['description']) . '</div>';
+		}
 		$this->fields_div();
 	}
 
@@ -173,8 +174,8 @@ class Crypto_Block
 			default:
 				printf(
 					'<label class="components-base-control__label" for="%s">%s</label> ',
-					$field['id'],
-					$field['label']
+					esc_attr($field['id']),
+					esc_html($field['label'])
 				);
 		}
 	}
@@ -194,10 +195,10 @@ class Crypto_Block
 	{
 		printf(
 			'<label class="rwp-checkbox-label"><input %s id="%s" name="%s" type="checkbox"> %s</label>',
-			$this->checked($field),
-			$field['id'],
-			$field['id'],
-			isset($field['description']) ? $field['description'] : ''
+			esc_attr($this->checked($field)),
+			esc_attr($field['id']),
+			esc_attr($field['id']),
+			isset($field['description']) ? esc_html($field['description']) : ''
 		);
 	}
 
@@ -205,14 +206,15 @@ class Crypto_Block
 	{
 		printf(
 			'<input class="components-text-control__input %s" id="%s" name="%s" %s type="%s" value="%s">',
-			isset($field['class']) ? $field['class'] : '',
-			$field['id'],
-			$field['id'],
-			isset($field['pattern']) ? "pattern='{$field['pattern']}'" : '',
-			$field['type'],
-			$this->value($field)
+			isset($field['class']) ? esc_attr($field['class']) : '',
+			esc_attr($field['id']),
+			esc_attr($field['id']),
+			isset($field['pattern']) ? "pattern='" . esc_attr($field['pattern']) . "'" : '',
+			esc_attr($field['type']),
+			esc_attr($this->value($field))
 		);
 	}
+
 
 	private function value($field)
 	{
@@ -270,7 +272,8 @@ class Crypto_Block
 		<h2>Content/page access restrictions for members</h2>
 		<div class="wrap">
 			<b>Limit access to certain content/pages based on crypto/NFT holdings within a "crypto wallet".</b>
-			<br><br><a class="button button-primary" href="<?php echo admin_url('admin.php?page=crypto_settings&tab=access&section=crypto_access_settings_start'); ?>">Restrict
+			<br><br><a class="button button-primary"
+				href="<?php echo esc_url(admin_url('admin.php?page=crypto_settings&tab=access&section=crypto_access_settings_start')); ?>">Restrict
 				User Settings</a>
 			<br><br>
 			<b>Tips</b>

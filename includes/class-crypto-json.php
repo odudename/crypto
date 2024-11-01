@@ -105,15 +105,15 @@ class Crypto_Generate_Json
 		if ($edit) {
 			$file_name = strtolower($domain) . '_edit.json';
 
-			$file_name_pending = strtolower($domain) . '_pending.json';
+			$file_name_pending = strtolower(str_replace(array('\\', '/', '*', '?', ':', '<', '>', '|', '"'), '_', $domain)) . '_pending.json';
 			$save_path = $base_path . '/' . $file_name_pending;
-			$f = @fopen($save_path, "w") or die(print_r(error_get_last(), true)); //if json file doesn't gets saved, uncomment this to check for errors
+			$f = @fopen($save_path, "w") or die(esc_html(print_r(error_get_last(), true))); //if json file doesn't gets saved, uncomment this to check for errors
 			fwrite($f, 'ipfs_hashcode');
 			fclose($f);
 		}
 
-		$save_path = $base_path . '/' . $file_name;
-		$f = @fopen($save_path, "w") or die(print_r(error_get_last(), true)); //if json file doesn't gets saved, uncomment this to check for errors
+		$save_path = $base_path . '/' . str_replace(array('\\', '/', '*', '?', ':', '<', '>', '|', '"'), '_', $file_name);
+		$f = @fopen($save_path, "w") or die(esc_html(print_r(error_get_last(), true))); //if json file doesn't gets saved, uncomment this to check for errors
 		fwrite($f, $data);
 		fclose($f);
 
@@ -180,15 +180,14 @@ class Crypto_Generate_Json
 
 			if (curl_errno($curl)) {
 				$error_msg = curl_error($curl);
-				throw new \Exception($error_msg);
+				throw new \Exception(esc_html($error_msg));
 			}
-
 			curl_close($curl);
 
 			if (isset($data['value']['cid'])) {
-				$cid = $data['value']['cid'];
+				$cid = htmlspecialchars($data['value']['cid'], ENT_QUOTES);
 				$file_name_cid = $base_path . '/' . $filename . '_cid.txt';
-				$f = @fopen($file_name_cid, "w") or die(print_r(error_get_last(), true)); //if json file doesn't gets saved, uncomment this to check for errors
+				$f = @fopen($file_name_cid, "w") or die(esc_html(error_get_last())); //if json file doesn't gets saved, uncomment this to check for errors
 				fwrite($f, $cid);
 				fclose($f);
 				//crypto_log("xx = " . $cid);

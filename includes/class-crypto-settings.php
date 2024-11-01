@@ -307,7 +307,7 @@ class crypto_Admin_Settings
     {
         foreach ($this->sections as $section) {
             if ($section['id'] == $args['id']) {
-                printf('<div class="inside">%s</div>', '<div class="crypto_card">' . $section['description'] . '</div>');
+                printf('<div class="inside">%s</div>', '<div class="crypto_card">' . wp_kses_post($section['description']) . '</div>');
                 break;
             }
         }
@@ -329,7 +329,7 @@ class crypto_Admin_Settings
         $html = sprintf('<input type="%1$s" class="%2$s-text" id="%3$s[%4$s]" name="%3$s[%4$s]" value="%5$s"%6$s/>', $type, $size, $args['section'], $args['id'], $value, $placeholder);
         $html .= $this->get_field_description($args);
 
-        echo $this->allowed_html($html);
+        echo wp_kses_post($this->allowed_html($html));
     }
 
     //Image display
@@ -512,7 +512,7 @@ class crypto_Admin_Settings
      */
     public function callback_html($args)
     {
-        echo $this->get_field_description($args);
+        echo wp_kses_post($this->get_field_description($args));
     }
 
     /**
@@ -526,7 +526,7 @@ class crypto_Admin_Settings
         $value = $this->get_option($args['id'], $args['section'], '');
         $size = isset($args['size']) && !is_null($args['size']) ? $args['size'] : '500px';
 
-        echo '<div style="max-width: ' . $size . ';">';
+        echo '<div style="max-width: ' . esc_attr($size) . ';">';
         $editor_settings = array(
             'teeny' => true,
             'textarea_name' => $args['section'] . '[' . $args['id'] . ']',
