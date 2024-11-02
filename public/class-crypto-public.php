@@ -118,6 +118,7 @@ class Crypto_Public
             'ajaxurl' => admin_url('admin-ajax.php'),
             'chainId' => $chainId,
             'executeJS' => $execute_js,
+            'nonce' => wp_create_nonce('crypto_ajax'),
             'crypto_plugin_url' => CRYPTO_PLUGIN_URL,
             'crypto_network' => $crypto_network,
             'crypto_contract' => $contract_addr

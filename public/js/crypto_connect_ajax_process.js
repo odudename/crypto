@@ -7,12 +7,13 @@ jQuery(document).ready(function () {
     e.preventDefault();
     id = jQuery(this).attr("data-id");
     method_name = jQuery(this).attr("data-method_name");
-    nonce = jQuery(this).attr("data-nonce");
+   // nonce = jQuery(this).attr("data-nonce");
+   nonce=crypto_connectChainAjax.nonce;
     param1 = jQuery(this).attr("data-param1");
     param2 = jQuery(this).attr("data-param2");
     param3 = jQuery(this).attr("data-param3");
    // alert("am ready");
-
+    console.log("Clicked the link, now processing it..."+nonce);
     jQuery.ajax({
       type: "post",
       dataType: "json",

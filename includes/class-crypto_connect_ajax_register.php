@@ -18,6 +18,7 @@ class crypto_connect_ajax_process
         $param3 = $_REQUEST["param3"];
         $method_name = $_REQUEST["method_name"];
 
+        // crypto_log('nonce: ' . $nonce . ' method: ' . $method_name . ' id: ' . $id . ' param1: ' . $param1 . ' param2: ' . $param2 . ' param3: ' . $param3);
         $response = array(
             'error' => false,
             'msg' => 'No Message',
@@ -29,13 +30,14 @@ class crypto_connect_ajax_process
             $response['error'] = true;
             $response['msg'] = 'Invalid nonce';
             echo wp_json_encode($response);
+            //  crypto_log($response);
             wp_die();
         }
 
         if (method_exists($this, $method_name)) {
             // Call the method dynamically and handle any exceptions
             try {
-                $msg = $this->$method_name($id, $param1, $param2, $param3);
+                $msg = $this->$method_name($id, $param1, $param2, $param3, $nonce);
                 $response['msg'] = $msg;
             } catch (Exception $e) {
                 $response['error'] = true;
@@ -45,7 +47,7 @@ class crypto_connect_ajax_process
             $response['error'] = true;
             $response['msg'] = 'Invalid method';
         }
-
+        //  crypto_log($response);
         echo wp_json_encode($response);
         wp_die();
     }
@@ -67,7 +69,7 @@ class crypto_connect_ajax_process
         }
     }
 
-    public function check($id, $param1, $param2, $param3)
+    public function check($id, $param1, $param2, $param3, $nonce)
     {
         if (is_user_logged_in()) {
             $the_user_id = $this->get_userid_by_meta('crypto_wallet', trim($param1));
@@ -81,11 +83,13 @@ class crypto_connect_ajax_process
         return "done";
     }
 
-    public function register($id, $param1, $param2, $param3)
+    public function register($id, $param1, $param2, $param3, $nonce)
     {
+        // crypto_log("register: " . $param1);
         if (!is_user_logged_in()) {
             $user_login = trim($param1);
             $the_user_id = $this->get_userid_by_meta('crypto_wallet', trim($param1));
+            //  crypto_log("the_user_id: " . $the_user_id);
 
             if ($the_user_id != 0) {
                 $user = get_user_by('id', $the_user_id);
@@ -122,7 +126,7 @@ class crypto_connect_ajax_process
         return "wrong";
     }
 
-    public function savenft($id, $param1, $param2, $param3)
+    public function savenft($id, $param1, $param2, $param3, $nonce)
     {
         if (is_user_logged_in()) {
             $str_arr = preg_split("/,/", $param2);
@@ -158,7 +162,7 @@ class crypto_connect_ajax_process
         }
     }
 
-    public function logout($id, $param1, $param2, $param3)
+    public function logout($id, $param1, $param2, $param3, $nonce)
     {
         wp_logout();
     }

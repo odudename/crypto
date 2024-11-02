@@ -112,7 +112,7 @@ async function onInit() {
 }
 
 function create_link_crypto_connect_login(nonce, postid, method, param1, param2, param3) {
-
+console.log('am clicked');
     newlink = document.createElement('a');
     newlink.innerHTML = '';
     newlink.setAttribute('id', 'crypto_connect_ajax_process');
@@ -127,11 +127,11 @@ function create_link_crypto_connect_login(nonce, postid, method, param1, param2,
 }
 
 function process_login_register(curr_user) {
-    //alert("register " + curr_user);
+  //  alert("register " + curr_user);
     //Javascript version to check is_user_logged_in()
     if (jQuery('body').hasClass('logged-in')) {
-        // console.log("check after login");
-        create_link_crypto_connect_login('<?php echo sanitize_key($nonce); ?>', '', 'check', curr_user, '', '');
+        console.log("check after login");
+        create_link_crypto_connect_login('nonce', '', 'check', curr_user, '', '');
         //jQuery("#crypto_connect_ajax_process").click();
         setTimeout(function() {
             jQuery('#crypto_connect_ajax_process').trigger('click');
@@ -139,9 +139,9 @@ function process_login_register(curr_user) {
 
 
     } else {
-        // console.log("register new");
-        create_link_crypto_connect_login('<?php echo sanitize_key($nonce); ?>', '', 'register', curr_user, '', '');
-        //jQuery("#crypto_connect_ajax_process").click();
+        console.log("register new");
+        create_link_crypto_connect_login('nonce', '', 'register', curr_user, '', '');
+       //jQuery("#crypto_connect_ajax_process").click();
         setTimeout(function() {
             jQuery('#crypto_connect_ajax_process').trigger('click');
         }, 1000);
