@@ -37,7 +37,7 @@ export default function Edit(props) {
 
 	return (
 		<Fragment>
-		<InspectorControls>, siz
+		<InspectorControls>
 			<PanelBody label={__('Add Token', 'crypto')}>
 				
 						<TextControl

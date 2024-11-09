@@ -329,7 +329,7 @@ class crypto_Admin_Settings
         $html = sprintf('<input type="%1$s" class="%2$s-text" id="%3$s[%4$s]" name="%3$s[%4$s]" value="%5$s"%6$s/>', $type, $size, $args['section'], $args['id'], $value, $placeholder);
         $html .= $this->get_field_description($args);
 
-        echo wp_kses_post($this->allowed_html($html));
+        echo $this->allowed_html($html);
     }
 
     //Image display

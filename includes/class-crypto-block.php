@@ -49,10 +49,12 @@ class Crypto_Block
 	{
 		$postID = url_to_postid($_SERVER['REQUEST_URI'], '_wpg_def_keyword', true);
 		$post = get_post($postID);
+		crypto_log("postID: " . $postID);
 		if (isset($post->ID)) {
 			$res = get_post_meta($post->ID, 'crypto_restrict', true);
+			crypto_log("res: " . $res);
 			if ($res == "on" && is_user_logged_in()) {
-				//flexi_log("restrictnio is on");
+				crypto_log("restrict is on");
 				if ($this->crypto_can_user_view()) {
 					//flexi_log("can iew");
 				} else {
