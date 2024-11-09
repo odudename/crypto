@@ -49,15 +49,16 @@ class Crypto_Block
 	{
 		$postID = url_to_postid($_SERVER['REQUEST_URI'], '_wpg_def_keyword', true);
 		$post = get_post($postID);
-		crypto_log("postID: " . $postID);
+		//("postID: " . $postID);
 		if (isset($post->ID)) {
 			$res = get_post_meta($post->ID, 'crypto_restrict', true);
-			crypto_log("res: " . $res);
+			//crypto_log("res: " . $res);
 			if ($res == "on" && is_user_logged_in()) {
 				crypto_log("restrict is on");
 				if ($this->crypto_can_user_view()) {
-					//flexi_log("can iew");
+					//crypto_log("can view");
 				} else {
+
 					//$restrict_page = crypto_get_option('restrict_page', 'crypto_access_settings', 0);
 					if (0 != $this->restrict_page) {
 						wp_redirect(esc_url(get_page_link($this->restrict_page)));
@@ -72,6 +73,7 @@ class Crypto_Block
 
 			$login_page = crypto_get_option('login_page', 'crypto_access_settings', 0);
 			if ($res == "on" && !is_user_logged_in()) {
+				//crypto_log("not logged in");
 				if (0 != $login_page) {
 					wp_redirect(get_page_link($login_page));
 					exit();
@@ -162,7 +164,7 @@ class Crypto_Block
 	{
 		foreach ($this->config['fields'] as $field) {
 	?><div class="components-base-control">
-	<div class="components-base-control__field"><?php
+    <div class="components-base-control__field"><?php
 												$this->label($field);
 												$this->field($field);
 												?></div>
@@ -270,32 +272,32 @@ class Crypto_Block
 		ob_start();
 		?>
 <div class="changelog section-getting-started">
-	<div class="feature-section">
-		<h2>Content/page access restrictions for members</h2>
-		<div class="wrap">
-			<b>Limit access to certain content/pages based on crypto/NFT holdings within a "crypto wallet".</b>
-			<br><br><a class="button button-primary"
-				href="<?php echo esc_url(admin_url('admin.php?page=crypto_settings&tab=access&section=crypto_access_settings_start')); ?>">Restrict
-				User Settings</a>
-			<br><br>
-			<b>Tips</b>
-			<ul>
-				<li>* Ensure that you use the correct smart contract address, which should start with "0x..." </li>
-				<li>* The number of Crypto and NFTs is calculated using the "balanceOf" function in Ethereum. </li>
-			</ul>
-			<hr>
-			<b>Do you have knowledge about the benefits of Web3Domain for domain resellers?</b><br>
-			<ul>
-				<li>* Allowing users to acquire subdomains on your primary Web3 domain is a great way to earn revenue
-					through membership.</li>
-				<li>* You will earn money as soon as the domain is minted.</li>
-				<li>* You can set the price for your subdomains yourself.</li>
-				<li>* You can also choose to not allow the public to mint subdomains, and only mint and transfer them
-					yourself, thereby avoiding commission fees.</li>
-				<li>* All Web3Domains are NFTs which can be sold on opensea.io</li>
-			</ul>
-		</div>
-	</div>
+    <div class="feature-section">
+        <h2>Content/page access restrictions for members</h2>
+        <div class="wrap">
+            <b>Limit access to certain content/pages based on crypto/NFT holdings within a "crypto wallet".</b>
+            <br><br><a class="button button-primary"
+                href="<?php echo esc_url(admin_url('admin.php?page=crypto_settings&tab=access&section=crypto_access_settings_start')); ?>">Restrict
+                User Settings</a>
+            <br><br>
+            <b>Tips</b>
+            <ul>
+                <li>* Ensure that you use the correct smart contract address, which should start with "0x..." </li>
+                <li>* The number of Crypto and NFTs is calculated using the "balanceOf" function in Ethereum. </li>
+            </ul>
+            <hr>
+            <b>Do you have knowledge about the benefits of Web3Domain for domain resellers?</b><br>
+            <ul>
+                <li>* Allowing users to acquire subdomains on your primary Web3 domain is a great way to earn revenue
+                    through membership.</li>
+                <li>* You will earn money as soon as the domain is minted.</li>
+                <li>* You can set the price for your subdomains yourself.</li>
+                <li>* You can also choose to not allow the public to mint subdomains, and only mint and transfer them
+                    yourself, thereby avoiding commission fees.</li>
+                <li>* All Web3Domains are NFTs which can be sold on opensea.io</li>
+            </ul>
+        </div>
+    </div>
 </div>
 <?php
 		$content = ob_get_clean();

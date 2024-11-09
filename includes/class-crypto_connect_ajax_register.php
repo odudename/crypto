@@ -18,24 +18,33 @@ class crypto_connect_ajax_process
         $param3 = $_REQUEST["param3"];
         $method_name = $_REQUEST["method_name"];
 
-        // crypto_log('nonce: ' . $nonce . ' method: ' . $method_name . ' id: ' . $id . ' param1: ' . $param1 . ' param2: ' . $param2 . ' param3: ' . $param3);
         $response = array(
             'error' => false,
             'msg' => 'No Message',
             'count' => '0',
         );
 
+        // Check if nonce validation has been done recently
+        $transient_key = 'crypto_nonce_' . md5($nonce);
+        if (get_transient($transient_key)) {
+            $response['error'] = true;
+            $response['msg'] = 'Duplicate request detected';
+            echo wp_json_encode($response);
+            wp_die();
+        }
+
         // Validate nonce
         if (!wp_verify_nonce($nonce, 'crypto_ajax')) {
             $response['error'] = true;
             $response['msg'] = 'Invalid nonce';
             echo wp_json_encode($response);
-            //  crypto_log($response);
             wp_die();
         }
 
+        // Store the transient for a short duration to prevent revalidation
+        set_transient($transient_key, true, 60); // Valid for 1 minute
+
         if (method_exists($this, $method_name)) {
-            // Call the method dynamically and handle any exceptions
             try {
                 $msg = $this->$method_name($id, $param1, $param2, $param3, $nonce);
                 $response['msg'] = $msg;
@@ -47,6 +56,7 @@ class crypto_connect_ajax_process
             $response['error'] = true;
             $response['msg'] = 'Invalid method';
         }
+
         //  crypto_log($response);
         echo wp_json_encode($response);
         wp_die();
@@ -114,12 +124,23 @@ class crypto_connect_ajax_process
     public function log_in($username)
     {
         if (!is_user_logged_in()) {
+            $login_attempt_key = 'crypto_login_' . md5($username);
+
+            // Check if there's a recent login attempt for this username
+            if (get_transient($login_attempt_key)) {
+                return "too_many_attempts";
+            }
+
             if ($user = get_user_by('login', $username)) {
                 clean_user_cache($user->ID);
                 wp_clear_auth_cookie();
                 wp_set_current_user($user->ID);
                 wp_set_auth_cookie($user->ID, true, is_ssl());
                 do_action('wp_login', $user->user_login, $user);
+
+                // Set a transient to limit multiple login attempts
+                set_transient($login_attempt_key, true, 300); // Lock for 5 minutes
+
                 return is_user_logged_in() ? "success" : "fail";
             }
         }
@@ -164,6 +185,20 @@ class crypto_connect_ajax_process
 
     public function logout($id, $param1, $param2, $param3, $nonce)
     {
+        // Get the current user
+        $current_user = wp_get_current_user();
+
+        if ($current_user) {
+            // Delete transients associated with this user's session
+            $login_attempt_key = 'crypto_login_' . md5($current_user->user_login);
+            delete_transient($login_attempt_key);
+
+            // If you use nonce-related transients, clear them here too
+            $transient_key = 'crypto_nonce_' . md5($nonce);
+            delete_transient($transient_key);
+        }
+
+        // Log the user out
         wp_logout();
     }
 }
