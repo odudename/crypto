@@ -5,7 +5,7 @@ Tags: crypto, login, metamask, NFT, Blockchain, Token
 Requires at least: 3.0.1
 Requires PHP: 5.5
 Tested up to: 6.6.2
-Stable tag: 2.17
+Stable tag: 2.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -109,6 +109,9 @@ Web3Domain is a platform that allows you to register and sell your own web3 doma
 3. Crypto Price
 
 == Changelog ==
+= 2.18 = 
+* Added nonce and transients support during login
+
 = 2.15 =
 * Removed Web3 Domain mint option
 
