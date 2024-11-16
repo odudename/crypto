@@ -44,7 +44,11 @@ class crypto_connect_ajax_process
         // Store the transient for a short duration to prevent revalidation
         set_transient($transient_key, true, 60); // Valid for 1 minute
 
-        if (method_exists($this, $method_name)) {
+        // Define a whitelist of allowed methods
+        $allowed_methods = ['check', 'register', 'savenft', 'logout', 'crypto_delete_json'];
+
+        // Check if method_name is in the whitelist
+        if (in_array($method_name, $allowed_methods) && method_exists($this, $method_name)) {
             try {
                 $msg = $this->$method_name($id, $param1, $param2, $param3, $nonce);
                 $response['msg'] = $msg;
@@ -57,10 +61,10 @@ class crypto_connect_ajax_process
             $response['msg'] = 'Invalid method';
         }
 
-        //  crypto_log($response);
         echo wp_json_encode($response);
         wp_die();
     }
+
 
     public function get_userid_by_meta($key, $value)
     {
