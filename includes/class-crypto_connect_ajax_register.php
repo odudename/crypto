@@ -99,30 +99,8 @@ class crypto_connect_ajax_process
 
     public function register($id, $param1, $param2, $param3, $nonce)
     {
-        // crypto_log("register: " . $param1);
-        if (!is_user_logged_in()) {
-            $user_login = trim($param1);
-            $the_user_id = $this->get_userid_by_meta('crypto_wallet', trim($param1));
-            //  crypto_log("the_user_id: " . $the_user_id);
-
-            if ($the_user_id != 0) {
-                $user = get_user_by('id', $the_user_id);
-                return $this->log_in($user->user_login);
-            } else {
-                $existing_user_id = username_exists($user_login);
-
-                if ($existing_user_id) {
-                    return $this->log_in($user_login);
-                } else {
-                    $user_id = wp_create_user($user_login, wp_generate_password());
-                    if (is_wp_error($user_id)) {
-                        return 'User creation failed';
-                    }
-                    update_user_meta($user_id, 'crypto_wallet', trim($param1));
-                    return $this->log_in($user_login);
-                }
-            }
-        }
+        crypto_log("register: " . $param1);
+        return $param1;
     }
 
     public function log_in($username)
@@ -136,16 +114,17 @@ class crypto_connect_ajax_process
             }
 
             if ($user = get_user_by('login', $username)) {
-                clean_user_cache($user->ID);
+                //  clean_user_cache($user->ID);
                 wp_clear_auth_cookie();
-                wp_set_current_user($user->ID);
-                wp_set_auth_cookie($user->ID, true, is_ssl());
-                do_action('wp_login', $user->user_login, $user);
+                // wp_set_current_user($user->ID);
+                //wp_set_auth_cookie($user->ID, true, is_ssl());
+                // do_action('wp_login', $user->user_login, $user);
 
                 // Set a transient to limit multiple login attempts
-                set_transient($login_attempt_key, true, 300); // Lock for 5 minutes
+                // set_transient($login_attempt_key, true, 1); // Lock for 5 minutes (seconds)
 
-                return is_user_logged_in() ? "success" : "fail";
+                //  return is_user_logged_in() ? "success" : "fail";
+                return "success";
             }
         }
         return "wrong";
