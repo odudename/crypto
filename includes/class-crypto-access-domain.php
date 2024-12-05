@@ -139,7 +139,7 @@ class Crypto_Access
         $put = "";
         ob_start();
         $nonce = wp_create_nonce('crypto_ajax');
-        if (is_user_logged_in()) {
+        if (Crypto_User::if_custom_user_logged_in()) {
             $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
 
             if ($this->default_access == 'web3domain') {

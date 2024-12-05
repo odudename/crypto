@@ -133,7 +133,7 @@ class Crypto
 		 */
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-crypto-settings.php';
 
-
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-crypto-user.php';
 		//Include common functions
 		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/functions.php';
 

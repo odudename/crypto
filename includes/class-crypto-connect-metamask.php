@@ -231,7 +231,7 @@ class Crypto_Connect_Metamask
                 ob_start();
                 $nonce = wp_create_nonce("crypto_connect_Metamask_ajax_process");
 
-                if (!is_user_logged_in()) {
+                if (!Crypto_User::if_custom_user_logged_in()) {
 
 
 ?>

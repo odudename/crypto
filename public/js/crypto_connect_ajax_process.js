@@ -28,16 +28,12 @@ jQuery(document).ready(function () {
         param3: param3,
       },
       beforeSend: function () {
-        //  alert("about to send");
+        console.log("execute method "+method_name+" with param "+param1+" "+param2+" "+param3);
         //jQuery("#crypto_connect_ajax_process_loader").show();
       },
       success: function (response) {
-        //  jQuery("#crypto_connect_ajax_process_content").empty();
-        // jQuery("#crypto_connect_ajax_process_content").append(response.msg).fadeIn("normal");
-       // alert(response.msg);
-        if (response.msg == "success") {
-          location.reload();
-        }
+        console.log(response);
+        location.reload();
       },
       complete: function (data) {
         jQuery("#crypto_connect_ajax_process_loader").hide();

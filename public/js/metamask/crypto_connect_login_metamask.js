@@ -6,7 +6,7 @@ jQuery(document).ready(function() {
 
     jQuery("[id=btn-login]").click(function() {
         //alert("Login");
-
+        console.log('Connect clicked');
         login();
     });
 
@@ -52,7 +52,7 @@ async function login() {
             return true
         } catch (error) {
             // User denied access
-          //  console.log("ooo");
+         // console.log("ooo "+error.message);
            // jQuery("[id=wallet_msg]").empty();
           //  jQuery("#flexi_notification_box").fadeIn("slow");
            // jQuery("[id=wallet_msg]").append(error.message).fadeIn("normal");
@@ -112,7 +112,7 @@ async function onInit() {
 }
 
 function create_link_crypto_connect_login(nonce, postid, method, param1, param2, param3) {
-console.log('am clicked');
+console.log('Create link..');
     newlink = document.createElement('a');
     newlink.innerHTML = '';
     newlink.setAttribute('id', 'crypto_connect_ajax_process');
@@ -129,10 +129,9 @@ console.log('am clicked');
 function process_login_register(curr_user) {
   //  alert("register " + curr_user);
     //Javascript version to check is_user_logged_in()
-    if (jQuery('body').hasClass('logged-in')) {
+    if (jQuery('body').hasClass('custom-user-logged-in')) {
         console.log("check after login");
         create_link_crypto_connect_login('nonce', '', 'check', curr_user, '', '');
-        //jQuery("#crypto_connect_ajax_process").click();
         setTimeout(function() {
             jQuery('#crypto_connect_ajax_process').trigger('click');
         }, 1000);
@@ -141,7 +140,6 @@ function process_login_register(curr_user) {
     } else {
         console.log("register new");
         create_link_crypto_connect_login('nonce', '', 'register', curr_user, '', '');
-       //jQuery("#crypto_connect_ajax_process").click();
         setTimeout(function() {
             jQuery('#crypto_connect_ajax_process').trigger('click');
         }, 1000);

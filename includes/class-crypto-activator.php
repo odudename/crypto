@@ -33,120 +33,44 @@ class Crypto_Activator
 	public static function activate()
 	{
 		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'custom_users';
+		$charset_collate = $wpdb->get_charset_collate();
+
+		// SQL to create table
+		$sql = "CREATE TABLE $table_name (
+            ID BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_login VARCHAR(191) NOT NULL UNIQUE,
+            user_registered DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            user_status TINYINT(1) NOT NULL DEFAULT 0,
+            user_block TINYINT(1) NOT NULL DEFAULT 0,
+            PRIMARY KEY (ID)
+        ) $charset_collate;";
+
+		// Log SQL for debugging
+		//error_log($sql);
+
+		// Include WordPress upgrade script
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		// Run SQL
+		dbDelta($sql);
+
+		// Verify if table was created
+		$table_exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
 		/*
-		if (null === $wpdb->get_row("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = 'search-domain'", 'ARRAY_A')) {
-
-			$current_user = wp_get_current_user();
-
-			// create post object
-			$page = array(
-				'post_title'  => __('Search Domain'),
-				'post_status' => 'publish',
-				'post_author' => $current_user->ID,
-				'post_type'   => 'page',
-				'post_content' => '<!-- wp:shortcode -->
-			  [crypto-domain-search]
-			  <!-- /wp:shortcode -->
-			  
-			  <!-- wp:shortcode -->
-			  [crypto-connect label="Connect" class="fl-button fl-is-info fl-is-light"]
-			  <!-- /wp:shortcode -->'
-			);
-
-			// insert the post into the database
-			$aid = wp_insert_post($page);
-
-			crypto_set_option('search_page', 'crypto_marketplace_settings', $aid);
+		if ($table_exists) {
+			error_log("Table $table_name created successfully.");
+		} else {
+			error_log("Failed to create table $table_name.");
 		}
-*/
-		/*
-		if (null === $wpdb->get_row("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = 'my-domain'", 'ARRAY_A')) {
+			*/
 
-			$current_user = wp_get_current_user();
-
-			// create post object
-			$page = array(
-				'post_title'  => __('My Domain'),
-				'post_status' => 'publish',
-				'post_author' => $current_user->ID,
-				'post_type'   => 'page',
-				'post_content' => '<!-- wp:paragraph -->
-				<p>[crypto-domain-market]</p>
-				<!-- /wp:paragraph -->
-				
-				<!-- wp:paragraph -->
-				<p>[crypto-connect label="Connect to Login" class="fl-button fl-is-info fl-is-light"]</p>
-				<!-- /wp:paragraph -->'
-			);
-
-			// insert the post into the database
-			$aid = wp_insert_post($page);
-
-			crypto_set_option('market_page', 'crypto_marketplace_settings', $aid);
-		}
-*/
-		/*
-		if (null === $wpdb->get_row("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = 'domain-url'", 'ARRAY_A')) {
-
-			$current_user = wp_get_current_user();
-
-			// create post object
-			$page = array(
-				'post_title'  => __('Domain Redirect'),
-				'post_status' => 'publish',
-				'post_author' => $current_user->ID,
-				'post_type'   => 'page',
-				'post_content' => '<!-- wp:shortcode -->
-				[crypto-domain-url]
-				<!-- /wp:shortcode -->
-				
-				<!-- wp:shortcode -->
-				[crypto-connect label="Connect Metamask" class="fl-button fl-is-info fl-is-light"]
-				<!-- /wp:shortcode -->'
-			);
-
-			// insert the post into the database
-			$aid = wp_insert_post($page);
-
-			crypto_set_option('url_page', 'crypto_marketplace_settings', $aid);
-		}
-*/
-
-		/*
-		if (null === $wpdb->get_row("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = 'domain-url'", 'ARRAY_A')) {
-
-			$current_user = wp_get_current_user();
-
-			// create post object
-			$page = array(
-				'post_title'  => __('Domain Information'),
-				'post_status' => 'publish',
-				'post_author' => $current_user->ID,
-				'post_type'   => 'page',
-				'post_content' => '<!-- wp:shortcode -->
-				[crypto-domain-info]
-				<!-- /wp:shortcode -->
-				
-				<!-- wp:shortcode -->
-				[crypto-connect label="Connect Metamask" class="fl-button fl-is-info fl-is-light"]
-				<!-- /wp:shortcode -->'
-			);
-
-			// insert the post into the database
-			$aid = wp_insert_post($page);
-
-			crypto_set_option('info_page', 'crypto_marketplace_settings', $aid);
-		}
-			
-	*/
-
-
-
+		// Create the "Check Web3 Name" page if it doesn't exist
 		if (null === $wpdb->get_row("SELECT post_name FROM {$wpdb->prefix}posts WHERE post_name = 'check-domain'", 'ARRAY_A')) {
-
 			$current_user = wp_get_current_user();
 
-			// create post object
+			// Create post object
 			$page = array(
 				'post_title'  => __('Check Web3 Name'),
 				'post_status' => 'publish',
@@ -161,17 +85,13 @@ class Crypto_Activator
 				<!-- /wp:shortcode -->'
 			);
 
-			// insert the post into the database
+			// Insert the post into the database
 			$aid = wp_insert_post($page);
 
 			crypto_set_option('restrict_page', 'crypto_access_settings', $aid);
 		}
 
-
-
-
-		//crypto_set_option('primary_domain', 'crypto_marketplace_settings', 'yak');
-		//crypto_set_option('price_ether', 'crypto_marketplace_settings', '1');
+		// Set default options
 		crypto_set_option('chainid', 'crypto_login_metamask', '0');
 		flush_rewrite_rules();
 	}

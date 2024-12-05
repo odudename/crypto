@@ -7,6 +7,7 @@ class crypto_connect_ajax_process
     {
         add_action("wp_ajax_crypto_connect_ajax_process", array($this, "crypto_connect_ajax_process"));
         add_action("wp_ajax_nopriv_crypto_connect_ajax_process", array($this, "crypto_connect_ajax_process"));
+        add_filter('body_class', array($this, 'add_custom_user_logged_in_class'));
     }
 
     public function crypto_connect_ajax_process()
@@ -24,14 +25,6 @@ class crypto_connect_ajax_process
             'count' => '0',
         );
 
-        // Check if nonce validation has been done recently
-        $transient_key = 'crypto_nonce_' . md5($nonce);
-        if (get_transient($transient_key)) {
-            $response['error'] = true;
-            $response['msg'] = 'Duplicate request detected';
-            echo wp_json_encode($response);
-            wp_die();
-        }
 
         // Validate nonce
         if (!wp_verify_nonce($nonce, 'crypto_ajax')) {
@@ -41,8 +34,7 @@ class crypto_connect_ajax_process
             wp_die();
         }
 
-        // Store the transient for a short duration to prevent revalidation
-        set_transient($transient_key, true, 60); // Valid for 1 minute
+
 
         // Define a whitelist of allowed methods
         $allowed_methods = ['check', 'register', 'savenft', 'logout', 'crypto_delete_json'];
@@ -85,49 +77,38 @@ class crypto_connect_ajax_process
 
     public function check($id, $param1, $param2, $param3, $nonce)
     {
-        if (is_user_logged_in()) {
-            $the_user_id = $this->get_userid_by_meta('crypto_wallet', trim($param1));
-            if ($the_user_id != 0) {
-                delete_user_meta($the_user_id, 'crypto_wallet');
-                update_user_meta(get_current_user_id(), 'crypto_wallet', trim($param1));
-            } else {
-                update_user_meta(get_current_user_id(), 'crypto_wallet', trim($param1));
-            }
-        }
+        crypto_log("User already logged in " . $param1);
         return "done";
     }
 
     public function register($id, $param1, $param2, $param3, $nonce)
     {
-        crypto_log("register: " . $param1);
-        return $param1;
+        crypto_log("register function called");
+        if (!Crypto_User::if_custom_user_logged_in()) {
+            $user_login = trim($param1);
+
+            $existing_user_id = Crypto_User::if_custom_user_exists($user_login);
+
+            if ($existing_user_id) {
+                crypto_log("Username already exists " . $user_login);
+                Crypto_User::login_custom_user($user_login);
+                $this->log_in($user_login);
+            } else {
+                crypto_log("New User " . $user_login);
+                Crypto_User::register_custom_user($user_login);
+                $this->log_in($user_login);
+            }
+        }
     }
 
     public function log_in($username)
     {
-        if (!is_user_logged_in()) {
-            $login_attempt_key = 'crypto_login_' . md5($username);
-
-            // Check if there's a recent login attempt for this username
-            if (get_transient($login_attempt_key)) {
-                return "too_many_attempts";
-            }
-
-            if ($user = get_user_by('login', $username)) {
-                //  clean_user_cache($user->ID);
-                wp_clear_auth_cookie();
-                // wp_set_current_user($user->ID);
-                //wp_set_auth_cookie($user->ID, true, is_ssl());
-                // do_action('wp_login', $user->user_login, $user);
-
-                // Set a transient to limit multiple login attempts
-                // set_transient($login_attempt_key, true, 1); // Lock for 5 minutes (seconds)
-
-                //  return is_user_logged_in() ? "success" : "fail";
-                return "success";
-            }
+        if (Crypto_User::if_custom_user_logged_in()) {
+            crypto_log("User already logged in " . $username);
+            return "success";
+        } else {
+            return "fail";
         }
-        return "wrong";
     }
 
     public function savenft($id, $param1, $param2, $param3, $nonce)
@@ -168,21 +149,21 @@ class crypto_connect_ajax_process
 
     public function logout($id, $param1, $param2, $param3, $nonce)
     {
-        // Get the current user
-        $current_user = wp_get_current_user();
+        Crypto_User::logout_custom_user();
+    }
 
-        if ($current_user) {
-            // Delete transients associated with this user's session
-            $login_attempt_key = 'crypto_login_' . md5($current_user->user_login);
-            delete_transient($login_attempt_key);
-
-            // If you use nonce-related transients, clear them here too
-            $transient_key = 'crypto_nonce_' . md5($nonce);
-            delete_transient($transient_key);
+    // Add custom class to body if custom user is logged in
+    public function add_custom_user_logged_in_class($classes)
+    {
+        // Check if the custom user is logged in
+        if (isset($_SESSION['custom_user']) && !empty($_SESSION['custom_user'])) {
+            // Add a class to the body tag
+            $classes[] = 'custom-user-logged-in';
+        } else {
+            // Remove the class from the body tag
+            $classes[] = 'custom-user-logged-out';
         }
-
-        // Log the user out
-        wp_logout();
+        return $classes;
     }
 }
 
