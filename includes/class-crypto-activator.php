@@ -44,6 +44,8 @@ class Crypto_Activator
             user_registered DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
             user_status TINYINT(1) NOT NULL DEFAULT 0,
             user_block TINYINT(1) NOT NULL DEFAULT 0,
+			domain_count TINYINT(1) NOT NULL DEFAULT 0,
+			domain_names TEXT NOT NULL,
             PRIMARY KEY (ID)
         ) $charset_collate;";
 

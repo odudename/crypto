@@ -31,7 +31,7 @@ class Crypto_Block
 				return $content;
 			} else {
 				$message = '<div class="message">';
-				$message .= __('Access to this content is limited as you do not possess Web3Domain in your wallet', 'crypto') . ": <strong><a href='" . esc_url(get_page_link($this->restrict_page)) . "'>." . $this->domain_name . "</a></strong>";
+				$message .= __('Access to this content is limited as you do not possess ODude Name in your wallet', 'crypto') . ": <strong><a href='" . esc_url(get_page_link($this->restrict_page)) . "'>." . $this->domain_name . "</a></strong>";
 				$message .= '</div>';
 			}
 		} else {
@@ -53,7 +53,7 @@ class Crypto_Block
 		if (isset($post->ID)) {
 			$res = get_post_meta($post->ID, 'crypto_restrict', true);
 			//crypto_log("res: " . $res);
-			if ($res == "on" && is_user_logged_in()) {
+			if ($res == "on" && Crypto_User::if_custom_user_logged_in()) {
 				crypto_log("restrict is on");
 				if ($this->crypto_can_user_view()) {
 					//crypto_log("can view");
@@ -72,7 +72,7 @@ class Crypto_Block
 
 
 			$login_page = crypto_get_option('login_page', 'crypto_access_settings', 0);
-			if ($res == "on" && !is_user_logged_in()) {
+			if ($res == "on" && !Crypto_User::if_custom_user_logged_in()) {
 				//crypto_log("not logged in");
 				if (0 != $login_page) {
 					wp_redirect(get_page_link($login_page));
@@ -90,9 +90,9 @@ class Crypto_Block
 
 		if (Crypto_User::if_custom_user_logged_in()) {
 
-
-			$check = get_user_meta(get_current_user_id(),  'domain_block', 'true');
-			if ($check == 'false') {
+			$current_user = Crypto_User::get_current_custom_user_login();
+			$check = Crypto_User::get_custom_user_value($current_user, 'user_status');
+			if ($check == '1') {
 				$ret = true;
 			} else {
 				$ret = false;

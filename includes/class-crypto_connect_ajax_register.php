@@ -57,24 +57,6 @@ class crypto_connect_ajax_process
         wp_die();
     }
 
-
-    public function get_userid_by_meta($key, $value)
-    {
-        if ($user = get_user_by('login', $value)) {
-            return $user->ID;
-        } else {
-            global $wpdb;
-            $users = $wpdb->get_results($wpdb->prepare("SELECT user_id FROM $wpdb->usermeta WHERE meta_key = %s AND meta_value = %s", $key, $value));
-            if ($users) {
-                foreach ($users as $user) {
-                    return $user->user_id;
-                }
-            } else {
-                return 0;
-            }
-        }
-    }
-
     public function check($id, $param1, $param2, $param3, $nonce)
     {
         crypto_log("User already logged in " . $param1);
@@ -113,28 +95,40 @@ class crypto_connect_ajax_process
 
     public function savenft($id, $param1, $param2, $param3, $nonce)
     {
-        if (is_user_logged_in()) {
+        crypto_log("Save nft now check login");
+        if (Crypto_User::if_custom_user_logged_in()) {
+            crypto_log("savenft function called");
+            $current_user = Crypto_User::get_current_custom_user_login();
             $str_arr = preg_split("/,/", $param2);
-            update_user_meta(get_current_user_id(), 'domain_names', $str_arr);
-            update_user_meta(get_current_user_id(), 'domain_count', $param3);
-            $saved_array = get_user_meta(get_current_user_id(), 'domain_names');
-            $this->checknft(get_current_user_id(), $saved_array);
+            Crypto_User::set_custom_user_value($current_user, 'domain_names', $str_arr);
+            Crypto_User::set_custom_user_value($current_user, 'domain_count', $param3);
+            // crypto_log($str_arr);
+            $saved_array = Crypto_User::get_custom_user_value($current_user, 'domain_names');
+            //crypto_log($saved_array);
+            $this->checknft($current_user, $saved_array);
         }
     }
 
     public function checknft($user_id, $saved_array)
     {
+        crypto_log("checknft function called");
+        $saved_array = maybe_unserialize($saved_array);
         $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
         if ($default_access == 'web3domain') {
             $check = crypto_get_option('domain_name', 'crypto_access_settings', 'yak');
-            if (is_array($saved_array) && !empty($saved_array[0])) {
-                $matches = preg_grep('/.' . $check . '$/', $saved_array[0]);
-                update_user_meta(get_current_user_id(), 'domain_block', count($matches) > 0 ? 'false' : 'true');
+            crypto_log($saved_array);
+            if (is_array($saved_array) && !empty($saved_array)) {
+                $matches = preg_grep('/\.' . preg_quote($check, '/') . '$/', $saved_array);
+                crypto_log("Count of matches " . count($matches));
+                Crypto_User::set_custom_user_value($user_id, 'user_status', count($matches) > 0 ? '0' : '1');
+            } else {
+                crypto_log("Saved array is empty or not an array.");
             }
         } else {
-            $nft_count = get_user_meta(get_current_user_id(), 'domain_count')[0];
+            $nft_count = Crypto_User::get_custom_user_value($user_id, 'domain_count');
             $system_nft_count_value = crypto_get_option('nft_count', 'crypto_access_other', '1');
-            update_user_meta(get_current_user_id(), 'domain_block', $nft_count >= $system_nft_count_value ? 'false' : 'true');
+            crypto_log("nft_count " . $nft_count . " system_nft_count_value " . $system_nft_count_value);
+            Crypto_User::set_custom_user_value($user_id, 'user_status', $nft_count >= $system_nft_count_value ? '0' : '1');
         }
     }
 

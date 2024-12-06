@@ -141,12 +141,12 @@ class Crypto_Access
         $nonce = wp_create_nonce('crypto_ajax');
         if (Crypto_User::if_custom_user_logged_in()) {
             $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
-
+            $current_user = Crypto_User::get_current_custom_user_login();
             if ($this->default_access == 'web3domain') {
-                $saved_array = get_user_meta(get_current_user_id(),  'domain_names');
-                // flexi_log($saved_array);
+                $saved_array = Crypto_User::get_custom_user_value($current_user,  'domain_names');
+                // crypto_log($saved_array);
                 $check = new crypto_connect_ajax_process();
-                $check->checknft(get_current_user_id(),  $saved_array);
+                $check->checknft($current_user,  $saved_array);
 ?>
 
                 <script>
@@ -243,13 +243,13 @@ class Crypto_Access
                 </script>
                 <?php
                 $check_access = new Crypto_Block();
-                $current_user = wp_get_current_user();
+                $current_user = Crypto_User::get_current_custom_user_login();
                 if ($check_access->crypto_can_user_view()) {
 
                 ?>
 
                     <div class="fl-tags fl-has-addons">
-                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user->user_login); ?>)</span>
+                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user); ?>)</span>
                         <span class="fl-tag fl-is-primary"><?php echo esc_html("." . $this->domain_name); ?> sub-name holder</span>
                     </div>
                 <?php
@@ -257,7 +257,7 @@ class Crypto_Access
                 ?>
 
                     <div class="fl-tags fl-has-addons">
-                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user->user_login); ?>)</span>
+                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user);  ?>)</span>
                         <span class="fl-tag fl-is-danger"><?php echo esc_html("." . $this->domain_name); ?> sub-domain required</span>
                     </div>
                 <?php

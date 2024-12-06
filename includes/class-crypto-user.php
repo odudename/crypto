@@ -180,17 +180,23 @@ class Crypto_User
 	}
 
 	// Function to set custom user status (like user_status or user_block)
-	public static function set_custom_user_status($user_login, $column, $value)
+	public static function set_custom_user_value($user_login, $column, $value)
 	{
 		global $wpdb;
 
 		// Sanitize input parameters
 		$user_login = sanitize_text_field($user_login);
 		$column = sanitize_text_field($column);
-		$value = intval($value); // Make sure the value is an integer for safety
+
+		// Serialize the value if it is an array
+		if (is_array($value)) {
+			$value = maybe_serialize($value);
+		} else {
+			$value = sanitize_text_field($value); // Sanitize non-array values as text
+		}
 
 		// Ensure the column is valid
-		$valid_columns = ['user_status', 'user_block']; // Add more valid columns if needed
+		$valid_columns = ['user_status', 'user_block', 'domain_count', 'domain_names']; // Add more valid columns if needed
 		if (!in_array($column, $valid_columns)) {
 			return false; // Invalid column name
 		}
@@ -201,7 +207,7 @@ class Crypto_User
 			$table_name,
 			[$column => $value], // The data to update
 			['user_login' => $user_login], // The WHERE condition (user_login)
-			['%d'], // Format for the value (integer)
+			['%s'], // Format for the value (string)
 			['%s'] // Format for user_login (string)
 		);
 
@@ -216,8 +222,9 @@ class Crypto_User
 	}
 
 
+
 	// Function to get custom user status (like user_status or user_block)
-	public static function get_custom_user_status($user_login, $column)
+	public static function get_custom_user_value($user_login, $column)
 	{
 		global $wpdb;
 
@@ -226,7 +233,7 @@ class Crypto_User
 		$column = sanitize_text_field($column);
 
 		// Ensure the column is valid
-		$valid_columns = ['user_status', 'user_block']; // Add more valid columns if needed
+		$valid_columns = ['user_status', 'user_block', 'domain_count', 'domain_names']; // Add more valid columns if needed
 		if (!in_array($column, $valid_columns)) {
 			return false; // Invalid column name
 		}
@@ -246,5 +253,21 @@ class Crypto_User
 		}
 
 		return false; // No value found (user doesn't exist or column is invalid)
+	}
+
+	public static function get_current_custom_user_login()
+	{
+		// Start the session if not already started
+		if (!session_id()) {
+			session_start();
+		}
+
+		// Check if a custom user is logged in
+		if (isset($_SESSION['custom_user']) && !empty($_SESSION['custom_user'])) {
+			// Sanitize and return the user_login stored in the session
+			return sanitize_text_field($_SESSION['custom_user']);
+		}
+
+		return false; // No custom user is logged in
 	}
 }
