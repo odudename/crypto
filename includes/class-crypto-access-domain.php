@@ -18,7 +18,6 @@ class Crypto_Access
         add_filter('crypto_settings_fields', array($this, 'add_fields'));
         $this->crypto_network = crypto_get_option('crypto_network', 'crypto_marketplace_settings', '137');
 
-
         add_filter('crypto_settings_fields', array($this, 'add_extension'));
         //add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
     }
@@ -28,21 +27,18 @@ class Crypto_Access
         wp_enqueue_script('crypto_web3domain', plugin_dir_url(__DIR__) . 'public/js/web3domain.js', array('jquery'), '', false);
     }
 
-
     //add_filter flexi_settings_tabs
     public function add_tabs($new)
     {
 
         $tabs = array(
-            'access'   => __('Access Control', 'crypto'),
+            'access' => __('Access Control', 'crypto'),
 
         );
-        $new  = array_merge($new, $tabs);
+        $new = array_merge($new, $tabs);
 
         return $new;
     }
-
-
 
     public function add_section($new)
     {
@@ -143,13 +139,22 @@ class Crypto_Access
             $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
             $current_user = Crypto_User::get_current_custom_user_login();
             if ($this->default_access == 'web3domain') {
-                $saved_array = Crypto_User::get_custom_user_value($current_user,  'domain_names');
+                $saved_array = Crypto_User::get_custom_user_value($current_user, 'domain_names');
                 // crypto_log($saved_array);
                 $check = new crypto_connect_ajax_process();
-                $check->checknft($current_user,  $saved_array);
+                $check->checknft($current_user, $saved_array);
 ?>
 
                 <script>
+                    function process_further() {
+                        // alert("help..");
+                        jQuery('#crypto_connect_ajax_process').trigger('click');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 3000);
+                    }
+
+
                     crypto_is_metamask_Connected().then(acc => {
                         if (acc.addr == '') {
                             console.log("Metamask is not connected. Please connect to it first.");
@@ -212,10 +217,7 @@ class Crypto_Access
                                         curr_user,
                                         persons, count);
                                     //  console.log(persons);
-                                    setTimeout(function() {
-                                        //alert("hi");
-                                        jQuery('#crypto_connect_ajax_process').trigger('click');
-                                    }, 1000);
+
 
                                 }
 
@@ -226,12 +228,7 @@ class Crypto_Access
                                                 "<li>Your wallet do not have <?php echo "." . esc_html($this->domain_name); ?> Domain. <strong>Account restricted.</strong> </li>"
                                             )
                                             .fadeIn("normal");
-                                        create_link_crypto_connect_login('<?php echo sanitize_key($nonce); ?>', '', 'savenft',
-                                            account, '', count);
 
-                                        setTimeout(function() {
-                                            jQuery('#crypto_connect_ajax_process').trigger('click');
-                                        }, 1000);
                                     }
 
                                 }
@@ -257,7 +254,7 @@ class Crypto_Access
                 ?>
 
                     <div class="fl-tags fl-has-addons">
-                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user);  ?>)</span>
+                        <span class="fl-tag">Account Status (<?php echo esc_html($current_user); ?>)</span>
                         <span class="fl-tag fl-is-danger"><?php echo esc_html("." . $this->domain_name); ?> sub-domain required</span>
                     </div>
                 <?php
@@ -287,7 +284,7 @@ class Crypto_Access
                 </div>
 
                 <div>
-                    <a href="#" id="check_domain" onclick="location.reload();" class="fl-button fl-is-link fl-is-light">Verify the
+                    <a href="#" id="check_domain" onclick="process_further();" class="fl-button fl-is-link fl-is-light">Verify the
                         presence of the
                         <?php echo esc_html("." . $this->domain_name); ?> ODude Name in your wallet</a>
                 </div>

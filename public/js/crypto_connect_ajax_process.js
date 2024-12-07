@@ -33,7 +33,7 @@ jQuery(document).ready(function () {
       },
       success: function (response) {
         console.log(response);
-        location.reload();
+        //location.reload();
       },
       complete: function (data) {
         jQuery("#crypto_connect_ajax_process_loader").hide();

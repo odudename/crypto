@@ -59,24 +59,24 @@ class crypto_connect_ajax_process
 
     public function check($id, $param1, $param2, $param3, $nonce)
     {
-        crypto_log("User already logged in " . $param1);
+        // crypto_log("Check Function called : " . $param1);
         return "done";
     }
 
     public function register($id, $param1, $param2, $param3, $nonce)
     {
-        crypto_log("register function called");
+        //  crypto_log("register function called");
         if (!Crypto_User::if_custom_user_logged_in()) {
             $user_login = trim($param1);
 
             $existing_user_id = Crypto_User::if_custom_user_exists($user_login);
 
             if ($existing_user_id) {
-                crypto_log("Username already exists " . $user_login);
+                //crypto_log("Username already exists " . $user_login);
                 Crypto_User::login_custom_user($user_login);
                 $this->log_in($user_login);
             } else {
-                crypto_log("New User " . $user_login);
+                //  crypto_log("New User " . $user_login);
                 Crypto_User::register_custom_user($user_login);
                 $this->log_in($user_login);
             }
@@ -86,7 +86,7 @@ class crypto_connect_ajax_process
     public function log_in($username)
     {
         if (Crypto_User::if_custom_user_logged_in()) {
-            crypto_log("User already logged in " . $username);
+            // crypto_log("User already logged in " . $username);
             return "success";
         } else {
             return "fail";
@@ -95,9 +95,9 @@ class crypto_connect_ajax_process
 
     public function savenft($id, $param1, $param2, $param3, $nonce)
     {
-        crypto_log("Save nft now check login");
+        // crypto_log("Save nft now check login");
         if (Crypto_User::if_custom_user_logged_in()) {
-            crypto_log("savenft function called");
+            // crypto_log("savenft function called");
             $current_user = Crypto_User::get_current_custom_user_login();
             $str_arr = preg_split("/,/", $param2);
             Crypto_User::set_custom_user_value($current_user, 'domain_names', $str_arr);
@@ -111,23 +111,23 @@ class crypto_connect_ajax_process
 
     public function checknft($user_id, $saved_array)
     {
-        crypto_log("checknft function called");
+        // crypto_log("checknft function called");
         $saved_array = maybe_unserialize($saved_array);
         $default_access = crypto_get_option('select_access_control', 'crypto_access_settings_start', 'web3domain');
         if ($default_access == 'web3domain') {
             $check = crypto_get_option('domain_name', 'crypto_access_settings', 'yak');
-            crypto_log($saved_array);
+            // crypto_log($saved_array);
             if (is_array($saved_array) && !empty($saved_array)) {
                 $matches = preg_grep('/\.' . preg_quote($check, '/') . '$/', $saved_array);
-                crypto_log("Count of matches " . count($matches));
-                Crypto_User::set_custom_user_value($user_id, 'user_status', count($matches) > 0 ? '0' : '1');
+                //  crypto_log("Count of matches " . count($matches) . " user :" . $user_id);
+                Crypto_User::set_custom_user_value($user_id, 'user_status', count($matches) > 0 ? '1' : '0');
             } else {
-                crypto_log("Saved array is empty or not an array.");
+                // crypto_log("Saved array is empty or not an array.");
             }
         } else {
             $nft_count = Crypto_User::get_custom_user_value($user_id, 'domain_count');
             $system_nft_count_value = crypto_get_option('nft_count', 'crypto_access_other', '1');
-            crypto_log("nft_count " . $nft_count . " system_nft_count_value " . $system_nft_count_value);
+            // crypto_log("nft_count " . $nft_count . " system_nft_count_value " . $system_nft_count_value);
             Crypto_User::set_custom_user_value($user_id, 'user_status', $nft_count >= $system_nft_count_value ? '0' : '1');
         }
     }

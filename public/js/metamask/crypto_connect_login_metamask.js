@@ -143,6 +143,9 @@ function process_login_register(curr_user) {
         setTimeout(function() {
             jQuery('#crypto_connect_ajax_process').trigger('click');
         }, 1000);
+        setTimeout(function() {
+            location.reload();
+        }, 3000);
 
     }
 }
