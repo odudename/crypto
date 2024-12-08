@@ -149,12 +149,12 @@ class crypto_connect_ajax_process
     // Add custom class to body if custom user is logged in
     public function add_custom_user_logged_in_class($classes)
     {
-        // Check if the custom user is logged in
-        if (isset($_SESSION['custom_user']) && !empty($_SESSION['custom_user'])) {
-            // Add a class to the body tag
+        // Check if the custom user is logged in using a transient
+        if (get_transient('custom_user')) {
+            // Add a class to the body tag for logged-in users
             $classes[] = 'custom-user-logged-in';
         } else {
-            // Remove the class from the body tag
+            // Add a class to the body tag for logged-out users
             $classes[] = 'custom-user-logged-out';
         }
         return $classes;

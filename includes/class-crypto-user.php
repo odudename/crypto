@@ -9,7 +9,6 @@ class Crypto_User
 		add_action("wp_ajax_nopriv_crypto_connect_ajax_process", array($this, "crypto_connect_ajax_process"));
 	}
 
-
 	/**
 	 * Register a custom user.
 	 *
@@ -49,13 +48,9 @@ class Crypto_User
 
 		// Check if the insertion was successful
 		if ($inserted) {
-			// Start the session if not already started
-			if (!session_id()) {
-				session_start();
-			}
 
-			// Set session variable for user login
-			$_SESSION['custom_user'] = $user_login;
+			// Set transient for user login
+			set_transient('custom_user', $user_login, HOUR_IN_SECONDS);
 
 			// Trigger WordPress action for custom user registration
 			do_action('custom_user_registered', $user_login);
@@ -96,13 +91,8 @@ class Crypto_User
 			return false; // User is blocked
 		}
 
-		// Start the session if not already started
-		if (!session_id()) {
-			session_start();
-		}
-
-		// Set session variable for user login
-		$_SESSION['custom_user'] = $user_login;
+		// Set transient for user login
+		set_transient('custom_user', $user_login, HOUR_IN_SECONDS);
 
 		// Trigger WordPress action for custom user login
 		do_action('custom_user_logged_in', $user_login);
@@ -118,18 +108,15 @@ class Crypto_User
 	public static function logout_custom_user()
 	{
 		// Check if the user is logged in
-		if (!isset($_SESSION['custom_user'])) {
+		if (!self::if_custom_user_logged_in()) {
 			return false; // No user logged in
 		}
 
-		// Get the wallet address from the session
-		$user_login = sanitize_text_field($_SESSION['custom_user']);
-
-		// Clear the session
-		unset($_SESSION['custom_user']);
+		// Delete the transient
+		delete_transient('custom_user');
 
 		// Trigger WordPress action for custom user logout
-		do_action('custom_user_logged_out', $user_login);
+		do_action('custom_user_logged_out');
 
 		return true; // Successfully logged out
 	}
@@ -141,17 +128,29 @@ class Crypto_User
 	 */
 	public static function if_custom_user_logged_in()
 	{
-		// Start the session if it's not already started
-		if (!session_id()) {
-			session_start();
-		}
-
-		// Check if the custom user is logged in via session
-		if (isset($_SESSION['custom_user']) && !empty($_SESSION['custom_user'])) {
+		// Check if the custom user is logged in via transient
+		if (get_transient('custom_user')) {
 			return true; // User is logged in
 		}
 
 		return false; // User is not logged in
+	}
+
+	/**
+	 * Get the currently logged-in custom user login.
+	 *
+	 * @return string|bool The user login if logged in, false otherwise.
+	 */
+	public static function get_current_custom_user_login()
+	{
+		// Retrieve the user login from the transient
+		$user_login = get_transient('custom_user');
+
+		if ($user_login) {
+			return sanitize_text_field($user_login);
+		}
+
+		return false; // No custom user is logged in
 	}
 
 	/**
@@ -179,7 +178,14 @@ class Crypto_User
 		return $user ? true : false;
 	}
 
-	// Function to set custom user status (like user_status or user_block)
+	/**
+	 * Set a custom value for a user (like user_status or user_block).
+	 *
+	 * @param string $user_login The username (wallet address).
+	 * @param string $column The column name to update.
+	 * @param mixed $value The value to set.
+	 * @return bool True on success, false on failure.
+	 */
 	public static function set_custom_user_value($user_login, $column, $value)
 	{
 		global $wpdb;
@@ -221,9 +227,13 @@ class Crypto_User
 		return false; // Failed to update
 	}
 
-
-
-	// Function to get custom user status (like user_status or user_block)
+	/**
+	 * Get a custom value for a user (like user_status or user_block).
+	 *
+	 * @param string $user_login The username (wallet address).
+	 * @param string $column The column name to retrieve.
+	 * @return mixed The value on success, false on failure.
+	 */
 	public static function get_custom_user_value($user_login, $column)
 	{
 		global $wpdb;
@@ -253,21 +263,5 @@ class Crypto_User
 		}
 
 		return false; // No value found (user doesn't exist or column is invalid)
-	}
-
-	public static function get_current_custom_user_login()
-	{
-		// Start the session if not already started
-		if (!session_id()) {
-			session_start();
-		}
-
-		// Check if a custom user is logged in
-		if (isset($_SESSION['custom_user']) && !empty($_SESSION['custom_user'])) {
-			// Sanitize and return the user_login stored in the session
-			return sanitize_text_field($_SESSION['custom_user']);
-		}
-
-		return false; // No custom user is logged in
 	}
 }
