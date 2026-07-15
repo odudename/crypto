@@ -83,6 +83,7 @@ class Crypto_Admin {
 			add_settings_error(
 				'crypto_settings_group',
 				'crypto_api_error',
+				// translators: %s: Error message returned from the API connection.
 				sprintf( __( 'API connection failed: %s', 'crypto' ), $test ),
 				'error'
 			);
@@ -99,12 +100,12 @@ class Crypto_Admin {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( $_POST['crypto_clear_cache_nonce'], 'crypto_clear_cache_action' ) ) {
-			wp_die( __( 'Security check failed.', 'crypto' ) );
+		if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['crypto_clear_cache_nonce'] ) ), 'crypto_clear_cache_action' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'crypto' ) );
 		}
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( __( 'You do not have permission to manage options.', 'crypto' ) );
+			wp_die( esc_html__( 'You do not have permission to manage options.', 'crypto' ) );
 		}
 
 		Crypto_API::clear_all_caches();

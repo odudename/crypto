@@ -39,19 +39,19 @@ require_once CRYPTO_PATH . 'includes/class-crypto-shortcode.php';
  * Plugin Activation Hook.
  * Set default settings.
  */
-function activate_crypto() {
+function crypto_activate() {
 	add_option( 'crypto_default_currency', 'USD' );
 	add_option( 'crypto_cache_duration', 10 );
 }
-register_activation_hook( __FILE__, 'activate_crypto' );
+register_activation_hook( __FILE__, 'crypto_activate' );
 
 /**
  * Initialize Plugin Components.
  */
-function run_crypto() {
+function crypto_run() {
 	if ( is_admin() ) {
 		new Crypto_Admin();
 	}
 	new Crypto_Shortcode();
 }
-run_crypto();
+crypto_run();

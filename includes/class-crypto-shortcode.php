@@ -79,6 +79,7 @@ class Crypto_Shortcode {
 			return sprintf(
 				'<span class="crypto-price-unavailable" title="%s">%s</span>',
 				esc_attr( $data->get_error_message() ),
+				// translators: %s: cryptocurrency symbol (e.g. BTC).
 				esc_html( sprintf( __( '[%s Price Unavailable]', 'crypto' ), $symbol ) )
 			);
 		}
@@ -148,7 +149,10 @@ class Crypto_Shortcode {
 						<span class="crypto-value"><?php echo esc_html( $currency_symbol . $formatted_market_cap ); ?></span>
 					</div>
 					<div class="crypto-footer-updated">
-						<?php printf( esc_html__( 'Updated %s ago', 'crypto' ), esc_html( $time_diff ) ); ?>
+						<?php
+						// translators: %s: human-readable time difference (e.g. 5 minutes).
+						printf( esc_html__( 'Updated %s ago', 'crypto' ), esc_html( $time_diff ) );
+						?>
 					</div>
 				</div>
 			</div>

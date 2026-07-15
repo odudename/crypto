@@ -74,17 +74,20 @@ class Crypto_API {
 		$body          = json_decode( wp_remote_retrieve_body( $response ), true );
 
 		if ( 200 !== $response_code ) {
+			// translators: %d: HTTP response status code.
 			$error_msg = isset( $body['status']['error_message'] ) ? $body['status']['error_message'] : sprintf( __( 'API returned HTTP code %d', 'crypto' ), $response_code );
 			return self::handle_fallback( $symbol, $convert, $error_msg );
 		}
 
 		// 5. Verify Data Structure
 		if ( ! isset( $body['data'][ $symbol ] ) ) {
+			// translators: %s: cryptocurrency symbol (e.g. BTC).
 			return new WP_Error( 'api_error', sprintf( __( 'No data returned for symbol: %s', 'crypto' ), $symbol ) );
 		}
 
 		$data = $body['data'][ $symbol ];
 		if ( ! isset( $data['quote'][ $convert ] ) ) {
+			// translators: %s: fiat currency symbol (e.g. USD).
 			return new WP_Error( 'api_error', sprintf( __( 'No quote returned for currency: %s', 'crypto' ), $convert ) );
 		}
 
@@ -135,6 +138,7 @@ class Crypto_API {
 			return $fallback_data;
 		}
 
+		// translators: %s: error message.
 		return new WP_Error( 'api_connection_failed', sprintf( __( 'API connection failed: %s', 'crypto' ), $error_msg ) );
 	}
 
@@ -195,6 +199,7 @@ class Crypto_API {
 		$body          = json_decode( wp_remote_retrieve_body( $response ), true );
 
 		if ( 200 !== $response_code ) {
+			// translators: %d: HTTP response status code.
 			return isset( $body['status']['error_message'] ) ? $body['status']['error_message'] : sprintf( __( 'API returned HTTP code %d', 'crypto' ), $response_code );
 		}
 

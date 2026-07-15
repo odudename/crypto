@@ -4,12 +4,12 @@ Donate link: https://odude.com
 Tags: crypto, bitcoin, cryptocurrency, price, coinmarketcap
 Requires at least: 5.0
 Requires PHP: 5.6
-Tested up to: 6.6.2
+Tested up to: 7.0
 Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Live prices for BTC and other cryptocurrency tokens using CoinMarketCap API. Displayed via a customizable shortcode with premium glassmorphic and dark layouts.
+Live crypto prices using CoinMarketCap API. Displayed via a customizable shortcode with premium glassmorphic and dark layouts.
 
 == Description ==
 
