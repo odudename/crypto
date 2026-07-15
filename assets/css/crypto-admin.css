@@ -1,0 +1,249 @@
+/*
+ * Admin dashboard styling for the Crypto Price plugin.
+ */
+
+.crypto-settings-wrap {
+	margin: 20px 20px 0 0;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.crypto-settings-header {
+	background: #fff;
+	padding: 24px;
+	border-radius: 8px;
+	border: 1px solid #e2e8f0;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+	margin-bottom: 20px;
+}
+
+.crypto-settings-header h1 {
+	margin: 0 0 8px 0;
+	font-size: 24px;
+	font-weight: 700;
+	color: #1e293b;
+}
+
+.crypto-settings-header p.description {
+	margin: 0;
+	font-size: 14px;
+	color: #64748b;
+}
+
+/* Dashboard Grid Layout */
+.crypto-dashboard-grid {
+	display: grid;
+	grid-template-columns: 1.2fr 0.8fr;
+	gap: 20px;
+}
+
+@media (max-width: 960px) {
+	.crypto-dashboard-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.crypto-card {
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid #e2e8f0;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+	padding: 24px;
+	box-sizing: border-box;
+}
+
+.crypto-card h2 {
+	margin-top: 0;
+	font-size: 18px;
+	font-weight: 600;
+	color: #0f172a;
+	padding-bottom: 12px;
+	border-bottom: 1px solid #f1f5f9;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.crypto-card h2 .dashicons {
+	color: #3b82f6;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+}
+
+/* Form Table Overrides */
+.crypto-card .form-table th {
+	width: 220px;
+	padding: 20px 10px 20px 0;
+	font-weight: 600;
+	color: #334155;
+}
+
+.crypto-card .form-table td {
+	padding: 15px 0;
+}
+
+.crypto-card input[type="text"].regular-text {
+	width: 100%;
+	max-width: 400px;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	padding: 6px 12px;
+	font-size: 14px;
+	box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+	transition: border-color 0.15s ease-in-out;
+}
+
+.crypto-card input[type="text"].regular-text:focus {
+	border-color: #3b82f6;
+	box-shadow: 0 0 0 1px #3b82f6;
+	outline: 2px solid transparent;
+}
+
+.crypto-card select {
+	min-width: 200px;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	padding: 5px 24px 5px 8px;
+	font-size: 14px;
+	height: auto;
+}
+
+.crypto-card select:focus {
+	border-color: #3b82f6;
+	box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* API Status Badge */
+.api-status-badge {
+	margin-top: 10px;
+	padding: 10px 14px;
+	border-radius: 6px;
+	font-size: 13px;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	border-left: 4px solid;
+}
+
+.api-status-badge.status-valid {
+	background-color: #f0fdf4;
+	border-left-color: #16a34a;
+	color: #14532d;
+}
+
+.api-status-badge.status-invalid {
+	background-color: #fef2f2;
+	border-left-color: #dc2626;
+	color: #7f1d1d;
+}
+
+.api-status-badge .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.text-success {
+	font-weight: 600;
+}
+
+.text-danger {
+	font-weight: 600;
+}
+
+/* Cache Action Box */
+.cache-action-box {
+	background: #f8fafc;
+	padding: 16px;
+	border-radius: 6px;
+	border: 1px solid #e2e8f0;
+	margin-top: 15px;
+}
+
+.cache-action-box h3 {
+	margin: 0 0 6px 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #334155;
+}
+
+.crypto-hr {
+	border: none;
+	border-top: 1px solid #f1f5f9;
+	margin: 24px 0;
+}
+
+/* Documentation Styles */
+.doc-card .doc-section {
+	margin-bottom: 24px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #f1f5f9;
+}
+
+.doc-card .doc-section:last-of-type {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: none;
+}
+
+.doc-card h4 {
+	margin: 0 0 10px 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #334155;
+}
+
+.shortcode-example {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: #f8fafc;
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+	padding: 8px 12px;
+	margin-bottom: 8px;
+}
+
+.shortcode-example code {
+	font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+	font-size: 13px;
+	color: #0f172a;
+	background: transparent;
+	padding: 0;
+}
+
+.copy-btn {
+	background: #fff !important;
+	border-color: #cbd5e1 !important;
+	color: #475569 !important;
+}
+
+.copy-btn:hover {
+	border-color: #94a3b8 !important;
+	color: #0f172a !important;
+}
+
+/* Table Style in Doc Card */
+.doc-card table.widefat {
+	margin-top: 10px;
+	border: 1px solid #e2e8f0;
+	border-radius: 6px;
+	overflow: hidden;
+	box-shadow: none;
+}
+
+.doc-card table.widefat th {
+	font-weight: 600;
+	color: #475569;
+	background: #f8fafc;
+	padding: 10px 12px;
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.doc-card table.widefat td {
+	padding: 10px 12px;
+	font-size: 13px;
+	color: #334155;
+}

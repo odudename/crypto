@@ -1,26 +1,6 @@
 <?php
-
 /**
  * Fired when the plugin is uninstalled.
- *
- * When populating this file, consider the following flow
- * of control:
- *
- * - This method should be static
- * - Check if the $_REQUEST content actually is the plugin name
- * - Run an admin referrer check to make sure it goes through authentication
- * - Verify the output of $_GET makes sense
- * - Repeat with other user roles. Best directly by using the links/query string parameters.
- * - Repeat things for multisite. Once for a single site in the network, once sitewide.
- *
- * This file may be updated more in future version of the Boilerplate; however, this is the
- * general skeleton and outline for how the file should work.
- *
- * For more information, see the following discussion:
- * https://github.com/tommcfarlin/WordPress-Plugin-Boilerplate/pull/123#issuecomment-28541913
- *
- * @link       https://odude.com/
- * @since      1.0.0
  *
  * @package    Crypto
  */
@@ -29,3 +9,25 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+// 1. Clear all transients
+$cache_keys = get_option( 'crypto_active_caches', array() );
+if ( is_array( $cache_keys ) ) {
+	foreach ( $cache_keys as $key ) {
+		// WordPress delete_transient expects key without prefix
+		$clean_key = str_replace( 'crypto_price_', '', $key );
+		delete_transient( $clean_key );
+
+		// Delete corresponding fallback option
+		// Key format is crypto_price_{SYMBOL}_{CONVERT} -> fallback key is crypto_fallback_{SYMBOL}_{CONVERT}
+		$fallback_key = str_replace( 'crypto_price_', 'crypto_fallback_', $key );
+		delete_option( $fallback_key );
+	}
+}
+
+// 2. Delete configuration options
+delete_option( 'crypto_api_key' );
+delete_option( 'crypto_default_currency' );
+delete_option( 'crypto_cache_duration' );
+delete_option( 'crypto_api_status' );
+delete_option( 'crypto_active_caches' );
