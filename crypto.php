@@ -3,14 +3,14 @@
  * The plugin bootstrap file.
  *
  * @link              https://odude.com/
- * @since             3.0.0
+ * @since             3.0.1
  * @package           Crypto
  *
  * @wordpress-plugin
  * Plugin Name:       Crypto
  * Plugin URI:        https://odude.com/
  * Description:       Crypto - Live prices for BTC and other cryptocurrency tokens using CoinMarketCap API. Displayed via a customizable shortcode with premium glassmorphic and dark layouts.
- * Version:           3.0.0
+ * Version:           3.0.1
  * Author:            ODude
  * Author URI:        https://odude.com/
  * License:           GPL-2.0+
@@ -24,7 +24,7 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Define Plugin Constants
-define( 'CRYPTO_VERSION', '3.0.0' );
+define( 'CRYPTO_VERSION', '3.0.1' );
 define( 'CRYPTO_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CRYPTO_URL', plugin_dir_url( __FILE__ ) );
 

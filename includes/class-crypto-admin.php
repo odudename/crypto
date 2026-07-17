@@ -127,9 +127,16 @@ class Crypto_Admin {
 		}
 
 		wp_enqueue_style(
+			'crypto-google-fonts',
+			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
+			array(),
+			null
+		);
+
+		wp_enqueue_style(
 			'crypto-admin-style',
 			plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/crypto-admin.css',
-			array(),
+			array( 'crypto-google-fonts' ),
 			CRYPTO_VERSION
 		);
 	}
