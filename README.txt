@@ -5,7 +5,7 @@ Tags: crypto, bitcoin, cryptocurrency, price, coinmarketcap
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 7.0
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,9 @@ You can manually clear all cached transients at any time from the plugin's setti
 2. Plugin Settings page under Options/Settings
 
 == Changelog ==
+
+= 3.0.2 =
+* assets updated
 
 = 3.0.1 =
 * Added Gutenberg Block Support.
