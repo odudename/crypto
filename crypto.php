@@ -34,6 +34,8 @@ define( 'CRYPTO_URL', plugin_dir_url( __FILE__ ) );
 require_once CRYPTO_PATH . 'includes/class-crypto-api.php';
 require_once CRYPTO_PATH . 'includes/class-crypto-admin.php';
 require_once CRYPTO_PATH . 'includes/class-crypto-shortcode.php';
+require_once CRYPTO_PATH . 'includes/class-crypto-block.php';
+require_once CRYPTO_PATH . 'includes/class-crypto-elementor.php';
 
 /**
  * Plugin Activation Hook.
@@ -53,5 +55,7 @@ function crypto_run() {
 		new Crypto_Admin();
 	}
 	new Crypto_Shortcode();
+	new Crypto_Block();
+	new Crypto_Elementor();
 }
 crypto_run();

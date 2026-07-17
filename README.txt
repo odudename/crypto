@@ -9,14 +9,16 @@ Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Live crypto prices using CoinMarketCap API. Displayed via a customizable shortcode with premium glassmorphic and dark layouts.
+Live crypto prices using CoinMarketCap API. Displayed via a customizable shortcode, native Gutenberg Block, or Elementor Widget with premium glassmorphic and dark layouts.
 
 == Description ==
 
-Display the latest cryptocurrency prices on your WordPress site dynamically and beautifully using the CoinMarketCap API. High-performance design features local transient caching to reduce API requests and credit usage.
+Display the latest cryptocurrency prices on your WordPress site dynamically and beautifully using the CoinMarketCap API. High-performance design features local transient caching to reduce API requests and credit usage. Fully integrated with both the Gutenberg Block Editor and Elementor Page Builder for easy drag-and-drop visual editing.
 
 === Features ===
 * **CoinMarketCap API Integration:** Real-time cryptocurrency price data direct from the leading data provider.
+* **Gutenberg Block Support:** Native WordPress Block Editor block featuring full GUI side panel configurations and live server-side rendering previews.
+* **Elementor Widget Support:** Drag-and-drop Elementor widget with options panel and live editor preview.
 * **Premium Themes:** Includes three layout themes: Glassmorphism (Glass), Sleek Dark (Dark), and Clean Light (Light).
 * **Multiple Layouts:** Choose between full detailed price Cards or compact inline Badges.
 * **Local Transient Caching:** Extremely efficient local caching that significantly reduces API rate limits and credits.
@@ -30,7 +32,27 @@ This section describes how to install the plugin and get it working.
 1. Upload the `crypto` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Navigate to **Settings > Crypto Settings** to input your CoinMarketCap API key and set defaults.
-4. Add the `[crypto_price]` shortcode to your pages, posts, or widgets.
+4. Use the "Crypto Price" Gutenberg block, the Elementor widget, or add the `[crypto_price]` shortcode.
+
+== Page Builders & Editors ==
+
+This plugin provides native integration with popular page builders and editors:
+
+=== WordPress Block Editor (Gutenberg) ===
+1. Open the Block Editor on any Post or Page.
+2. Click the `+` icon and search for "Crypto Price".
+3. Add the block and use the settings sidebar to configure:
+   * **Cryptocurrency Symbol:** Type any supported coin symbol (e.g. BTC, ETH).
+   * **Currency / Convert To:** Select your target currency.
+   * **Layout:** Switch between Card and Badge.
+   * **Theme:** Choose Glassmorphism, Dark, or Light.
+   * *A live server-side preview will automatically render in the editor.*
+
+=== Elementor Page Builder ===
+1. Edit any page with Elementor.
+2. In the widget panel, search for "Crypto Price".
+3. Drag and drop the widget into your section.
+4. Customize the widget using the Content Panel options.
 
 == Shortcode Guide ==
 
