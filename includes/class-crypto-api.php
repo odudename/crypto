@@ -17,6 +17,11 @@ class Crypto_API {
 	const API_URL = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest';
 
 	/**
+	 * DScroll API Endpoint.
+	 */
+	const DSCROLL_API_URL = 'https://manager.dscroll.com/api/crypto';
+
+	/**
 	 * Fetch quote for a specific symbol converted to a currency.
 	 *
 	 * @param string $symbol  Token symbol (e.g., BTC).
@@ -39,35 +44,129 @@ class Crypto_API {
 			return $cached_data;
 		}
 
-		// 2. Fetch API Key
-		$api_key = get_option( 'crypto_api_key' );
-		if ( empty( $api_key ) ) {
-			return new WP_Error( 'missing_api_key', __( 'CoinMarketCap API Key is not configured.', 'crypto' ) );
+		// 2. Fetch Configured API Provider and Key
+		$api_provider = get_option( 'crypto_api_provider', 'dscroll' );
+		$api_key      = get_option( 'crypto_api_key', '' );
+
+		// Fallback to DScroll API if provider is coinmarketcap but no key is configured
+		if ( 'coinmarketcap' === $api_provider && empty( $api_key ) ) {
+			$api_provider = 'dscroll';
 		}
 
-		// 3. Query the API
-		$url = add_query_arg(
-			array(
-				'symbol'  => $symbol,
-				'convert' => $convert,
-			),
-			self::API_URL
-		);
+		// 3. Query the appropriate API
+		$formatted_data = self::fetch_price_from_api( $symbol, $convert, $api_provider, $api_key );
 
-		$response = wp_remote_get(
-			$url,
-			array(
-				'headers' => array(
-					'X-CMC_PRO_API_KEY' => $api_key,
-					'Accept'            => 'application/json',
-					'User-Agent'        => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+		if ( is_wp_error( $formatted_data ) ) {
+			// If requested currency is not USD, try fetching in USD and converting
+			if ( 'USD' !== $convert ) {
+				$usd_data = self::get_price( $symbol, 'USD' );
+
+				if ( ! is_wp_error( $usd_data ) ) {
+					$rates = self::get_usd_exchange_rates();
+					if ( is_array( $rates ) && isset( $rates[ $convert ] ) ) {
+						$rate = floatval( $rates[ $convert ] );
+
+						$formatted_data = array(
+							'id'                 => $usd_data['id'],
+							'name'               => $usd_data['name'],
+							'symbol'             => $usd_data['symbol'],
+							'price'              => $usd_data['price'] * $rate,
+							'percent_change_1h'  => $usd_data['percent_change_1h'],
+							'percent_change_24h' => $usd_data['percent_change_24h'],
+							'percent_change_7d'  => $usd_data['percent_change_7d'],
+							'market_cap'         => $usd_data['market_cap'] * $rate,
+							'volume_24h'         => $usd_data['volume_24h'] * $rate,
+							'last_updated'       => time(),
+							'is_fallback'        => $usd_data['is_fallback'],
+						);
+
+						if ( isset( $usd_data['fallback_error'] ) ) {
+							$formatted_data['fallback_error'] = $usd_data['fallback_error'];
+						}
+
+						// Store in cache and fallback option
+						$cache_duration_mins = (int) get_option( 'crypto_cache_duration', 10 );
+						$cache_duration      = $cache_duration_mins * MINUTE_IN_SECONDS;
+
+						set_transient( $transient_key, $formatted_data, $cache_duration );
+						update_option( 'crypto_fallback_' . $symbol . '_' . $convert, $formatted_data );
+						self::register_active_cache( $transient_key );
+
+						return $formatted_data;
+					}
+				}
+			}
+
+			// If fallback conversion also fails, use last successfully stored value
+			return self::handle_fallback( $symbol, $convert, $formatted_data->get_error_message() );
+		}
+
+		// 4. Store in Cache and Fallback option (on success)
+		$cache_duration_mins = (int) get_option( 'crypto_cache_duration', 10 );
+		$cache_duration      = $cache_duration_mins * MINUTE_IN_SECONDS;
+
+		set_transient( $transient_key, $formatted_data, $cache_duration );
+		update_option( 'crypto_fallback_' . $symbol . '_' . $convert, $formatted_data );
+
+		// Register the cache key to track for clearing
+		self::register_active_cache( $transient_key );
+
+		return $formatted_data;
+	}
+
+	/**
+	 * Fetch price data directly from the selected API provider.
+	 *
+	 * @param string $symbol       Token symbol.
+	 * @param string $convert      Currency convert target.
+	 * @param string $api_provider API provider (dscroll or coinmarketcap).
+	 * @param string $api_key      CoinMarketCap API Key.
+	 * @return array|WP_Error Formatted price data array or WP_Error on failure.
+	 */
+	private static function fetch_price_from_api( $symbol, $convert, $api_provider, $api_key ) {
+		if ( 'dscroll' === $api_provider ) {
+			$url = add_query_arg(
+				array(
+					'symbol'   => $symbol,
+					'currency' => $convert,
 				),
-				'timeout' => 15,
-			) );
+				self::DSCROLL_API_URL
+			);
 
-		// 4. Handle HTTP or Connection Error
+			$response = wp_remote_get(
+				$url,
+				array(
+					'headers' => array(
+						'Accept'     => 'application/json',
+						'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+					),
+					'timeout' => 15,
+				)
+			);
+		} else {
+			$url = add_query_arg(
+				array(
+					'symbol'  => $symbol,
+					'convert' => $convert,
+				),
+				self::API_URL
+			);
+
+			$response = wp_remote_get(
+				$url,
+				array(
+					'headers' => array(
+						'X-CMC_PRO_API_KEY' => $api_key,
+						'Accept'            => 'application/json',
+						'User-Agent'        => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+					),
+					'timeout' => 15,
+				)
+			);
+		}
+
 		if ( is_wp_error( $response ) ) {
-			return self::handle_fallback( $symbol, $convert, $response->get_error_message() );
+			return $response;
 		}
 
 		$response_code = wp_remote_retrieve_response_code( $response );
@@ -76,25 +175,28 @@ class Crypto_API {
 		if ( 200 !== $response_code ) {
 			// translators: %d: HTTP response status code.
 			$error_msg = isset( $body['status']['error_message'] ) ? $body['status']['error_message'] : sprintf( __( 'API returned HTTP code %d', 'crypto' ), $response_code );
-			return self::handle_fallback( $symbol, $convert, $error_msg );
+			return new WP_Error( 'api_response_error', $error_msg );
 		}
 
-		// 5. Verify Data Structure
+		// Verify Data Structure
 		if ( ! isset( $body['data'][ $symbol ] ) ) {
 			// translators: %s: cryptocurrency symbol (e.g. BTC).
 			return new WP_Error( 'api_error', sprintf( __( 'No data returned for symbol: %s', 'crypto' ), $symbol ) );
 		}
 
 		$data = $body['data'][ $symbol ];
-		if ( ! isset( $data['quote'][ $convert ] ) ) {
+		if ( is_array( $data ) && isset( $data[0] ) ) {
+			$data = $data[0];
+		}
+
+		if ( empty( $data ) || ! is_array( $data ) || ! isset( $data['quote'][ $convert ] ) ) {
 			// translators: %s: fiat currency symbol (e.g. USD).
 			return new WP_Error( 'api_error', sprintf( __( 'No quote returned for currency: %s', 'crypto' ), $convert ) );
 		}
 
 		$quote = $data['quote'][ $convert ];
 
-		// 6. Structure Success Data
-		$formatted_data = array(
+		return array(
 			'id'                 => $data['id'],
 			'name'               => $data['name'],
 			'symbol'             => $data['symbol'],
@@ -107,18 +209,52 @@ class Crypto_API {
 			'last_updated'       => time(),
 			'is_fallback'        => false,
 		);
+	}
 
-		// 7. Store in Cache and Fallback option
-		$cache_duration_mins = (int) get_option( 'crypto_cache_duration', 10 );
-		$cache_duration      = $cache_duration_mins * MINUTE_IN_SECONDS;
+	/**
+	 * Fetch USD exchange rates from public API with caching.
+	 *
+	 * @return array|bool Array of rates or false on failure.
+	 */
+	private static function get_usd_exchange_rates() {
+		$transient_key = 'crypto_usd_exchange_rates';
+		$rates = get_transient( $transient_key );
 
-		set_transient( $transient_key, $formatted_data, $cache_duration );
-		update_option( 'crypto_fallback_' . $symbol . '_' . $convert, $formatted_data );
+		if ( false !== $rates ) {
+			return $rates;
+		}
 
-		// Register the cache key to track for clearing
+		$response = wp_remote_get(
+			'https://open.er-api.com/v6/latest/USD',
+			array(
+				'timeout' => 10,
+				'headers' => array(
+					'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return false;
+		}
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( 200 !== $response_code ) {
+			return false;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		if ( ! isset( $body['result'] ) || 'success' !== $body['result'] || ! isset( $body['rates'] ) ) {
+			return false;
+		}
+
+		$rates = $body['rates'];
+
+		// Cache for 12 hours (12 * HOUR_IN_SECONDS)
+		set_transient( $transient_key, $rates, 12 * HOUR_IN_SECONDS );
 		self::register_active_cache( $transient_key );
 
-		return $formatted_data;
+		return $rates;
 	}
 
 	/**

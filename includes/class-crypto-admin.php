@@ -38,6 +38,12 @@ class Crypto_Admin {
 	 * Register settings, sections, and fields.
 	 */
 	public function register_settings() {
+		register_setting( 'crypto_settings_group', 'crypto_api_provider', array(
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+			'default'           => 'dscroll',
+		) );
+
 		register_setting( 'crypto_settings_group', 'crypto_api_key', array(
 			'type'              => 'string',
 			'sanitize_callback' => 'sanitize_text_field',
@@ -149,6 +155,7 @@ class Crypto_Admin {
 			return;
 		}
 
+		$api_provider     = get_option( 'crypto_api_provider', 'dscroll' );
 		$api_key          = get_option( 'crypto_api_key', '' );
 		$default_currency = get_option( 'crypto_default_currency', 'USD' );
 		$api_status       = get_option( 'crypto_api_status', '' );
@@ -210,16 +217,47 @@ class Crypto_Admin {
 						<table class="form-table" role="presentation">
 							<tbody>
 								<tr>
+									<th scope="row"><label><?php esc_html_e( 'API Provider', 'crypto' ); ?></label></th>
+									<td>
+										<div class="api-provider-options">
+											<div class="api-provider-option">
+												<input type="radio" id="provider_dscroll" name="crypto_api_provider" value="dscroll" <?php checked( $api_provider, 'dscroll' ); ?> />
+												<label for="provider_dscroll">
+													<span class="provider-title"><?php esc_html_e( 'DScroll API', 'crypto' ); ?></span>
+													<span class="provider-badge"><?php esc_html_e( 'Default', 'crypto' ); ?></span>
+												</label>
+											</div>
+											<div class="api-provider-option">
+												<input type="radio" id="provider_coinmarketcap" name="crypto_api_provider" value="coinmarketcap" <?php checked( $api_provider, 'coinmarketcap' ); ?> />
+												<label for="provider_coinmarketcap">
+													<span class="provider-title"><?php esc_html_e( 'CoinMarketCap API', 'crypto' ); ?></span>
+												</label>
+											</div>
+										</div>
+										<p class="description">
+											<?php esc_html_e( 'DScroll API is active by default and does not require an API key. For maximum stability and accurate live information, we encourage getting a free CoinMarketCap API key.', 'crypto' ); ?>
+										</p>
+									</td>
+								</tr>
+
+								<tr>
 									<th scope="row"><label for="crypto_api_key"><?php esc_html_e( 'CoinMarketCap API Key', 'crypto' ); ?></label></th>
 									<td>
 										<input type="text" id="crypto_api_key" name="crypto_api_key" value="<?php echo esc_attr( $api_key ); ?>" class="regular-text code" placeholder="xxxx-xxxx-xxxx-xxxx" />
 										<p class="description">
-											<?php esc_html_e( 'Enter your CoinMarketCap Professional API key. You can get a free key from ', 'crypto' ); ?>
-											<a href="https://pro.coinmarketcap.com/" target="_blank" rel="noopener">pro.coinmarketcap.com</a>.
+											<?php esc_html_e( 'Required only if CoinMarketCap API is selected. You can get a free key from ', 'crypto' ); ?>
+											<a href="https://pro-api.coinmarketcap.com/" target="_blank" rel="noopener">pro.coinmarketcap.com</a>.
+											<br />
+											<em><?php esc_html_e( 'If selected but left empty, the plugin will automatically fallback to the DScroll API.', 'crypto' ); ?></em>
 										</p>
-										<?php if ( ! empty( $api_key ) ) : ?>
+										<?php if ( 'dscroll' === $api_provider || ( 'coinmarketcap' === $api_provider && empty( $api_key ) ) ) : ?>
+											<div class="api-status-badge status-valid">
+												<strong><?php esc_html_e( 'Active Provider: ', 'crypto' ); ?></strong>
+												<span class="status-text text-success"><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'DScroll API (No key needed)', 'crypto' ); ?></span>
+											</div>
+										<?php elseif ( ! empty( $api_key ) ) : ?>
 											<div class="api-status-badge <?php echo 'valid' === $api_status ? 'status-valid' : 'status-invalid'; ?>">
-												<strong><?php esc_html_e( 'Connection Status: ', 'crypto' ); ?></strong>
+												<strong><?php esc_html_e( 'CoinMarketCap Status: ', 'crypto' ); ?></strong>
 												<?php if ( 'valid' === $api_status ) : ?>
 													<span class="status-text text-success"><span class="dashicons dashicons-yes-alt"></span> <?php esc_html_e( 'Active & Verified', 'crypto' ); ?></span>
 												<?php else : ?>

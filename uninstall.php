@@ -27,6 +27,7 @@ function crypto_uninstall_plugin() {
 	}
 
 	// 2. Delete configuration options.
+	delete_option( 'crypto_api_provider' );
 	delete_option( 'crypto_api_key' );
 	delete_option( 'crypto_default_currency' );
 	delete_option( 'crypto_cache_duration' );

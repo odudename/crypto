@@ -42,6 +42,7 @@ require_once CRYPTO_PATH . 'includes/class-crypto-elementor.php';
  * Set default settings.
  */
 function crypto_activate() {
+	add_option( 'crypto_api_provider', 'dscroll' );
 	add_option( 'crypto_default_currency', 'USD' );
 	add_option( 'crypto_cache_duration', 10 );
 }
