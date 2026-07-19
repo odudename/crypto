@@ -1,22 +1,23 @@
 === Crypto ===
 Contributors: odude
-Donate link: https://odude.com
-Tags: crypto, bitcoin, cryptocurrency, price, coinmarketcap
+Donate link: https://dscroll.com
+Tags: crypto, bitcoin, cryptocurrency, price, coinmarketcap, dscroll
 Requires at least: 5.0
 Requires PHP: 5.6
 Tested up to: 7.0
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Live crypto prices using CoinMarketCap API. Displayed via a customizable shortcode, native Gutenberg Block, or Elementor Widget with premium glassmorphic and dark layouts.
+Live crypto prices via DScroll or CoinMarketCap. No API key required. Display using shortcode, Gutenberg block, or Elementor widget.
 
 == Description ==
 
-Display the latest cryptocurrency prices on your WordPress site dynamically and beautifully using the CoinMarketCap API. High-performance design features local transient caching to reduce API requests and credit usage. Fully integrated with both the Gutenberg Block Editor and Elementor Page Builder for easy drag-and-drop visual editing.
+Display the latest cryptocurrency prices on your WordPress site dynamically and beautifully using DScroll API or CoinMarketCap API. DScroll API works out of the box with no API key required. High-performance design features local transient caching to reduce API requests. Fully integrated with both the Gutenberg Block Editor and Elementor Page Builder for easy drag-and-drop visual editing.
 
 === Features ===
-* **CoinMarketCap API Integration:** Real-time cryptocurrency price data direct from the leading data provider.
+* **DScroll & CoinMarketCap API Support:** Retrieve real-time cryptocurrency price data using DScroll API or CoinMarketCap API.
+* **No API Key Required:** Use DScroll API as your provider and get started instantly without needing any API key.
 * **Gutenberg Block Support:** Native WordPress Block Editor block featuring full GUI side panel configurations and live server-side rendering previews.
 * **Elementor Widget Support:** Drag-and-drop Elementor widget with options panel and live editor preview.
 * **Premium Themes:** Includes three layout themes: Glassmorphism (Glass), Sleek Dark (Dark), and Clean Light (Light).
@@ -31,7 +32,7 @@ This section describes how to install the plugin and get it working.
 
 1. Upload the `crypto` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Navigate to **Settings > Crypto Settings** to input your CoinMarketCap API key and set defaults.
+3. Navigate to **Settings > Crypto Settings** to choose your API provider (DScroll API works out of the box with no API key required).
 4. Use the "Crypto Price" Gutenberg block, the Elementor widget, or add the `[crypto_price]` shortcode.
 
 == Page Builders & Editors ==
@@ -78,10 +79,13 @@ Displays Solana price in a compact badge format with the dark theme.
 
 == Frequently Asked Questions ==
 
+= Is an API key required? =
+No, the default DScroll API provider does not require any API key to function. A CoinMarketCap API key is only needed if you choose to switch your API provider to CoinMarketCap.
+
 = Where do I get a CoinMarketCap API key? =
 You can sign up for a free developer account and obtain your API key at [pro.coinmarketcap.com](https://pro.coinmarketcap.com/).
 
-= What happens if the CoinMarketCap API is down or rates are exceeded? =
+= What happens if the API is down or rates are exceeded? =
 The plugin will enter Offline Fallback mode, safely displaying the last retrieved cache value and showing a subtle indicator for administrators without breaking your page layout.
 
 = How do I clear the cached prices? =
@@ -95,7 +99,9 @@ You can manually clear all cached transients at any time from the plugin's setti
 == Changelog ==
 
 = 3.0.2 =
-* assets updated
+* Added support for DScroll API provider (no API key required).
+* Made CoinMarketCap API key optional.
+* assets updated.
 
 = 3.0.1 =
 * Added Gutenberg Block Support.

@@ -37,7 +37,8 @@ class Crypto_Block {
 			'crypto-block-editor',
 			plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/crypto-block.js',
 			array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-server-side-render' ),
-			CRYPTO_VERSION
+			CRYPTO_VERSION,
+			true
 		);
 
 		register_block_type(

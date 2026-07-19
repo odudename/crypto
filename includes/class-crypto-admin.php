@@ -136,7 +136,7 @@ class Crypto_Admin {
 			'crypto-google-fonts',
 			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap',
 			array(),
-			null
+			CRYPTO_VERSION
 		);
 
 		wp_enqueue_style(
@@ -144,6 +144,14 @@ class Crypto_Admin {
 			plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/crypto-admin.css',
 			array( 'crypto-google-fonts' ),
 			CRYPTO_VERSION
+		);
+
+		wp_enqueue_script(
+			'crypto-admin-script',
+			plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/crypto-admin.js',
+			array(),
+			CRYPTO_VERSION,
+			true
 		);
 	}
 
@@ -219,20 +227,12 @@ class Crypto_Admin {
 								<tr>
 									<th scope="row"><label><?php esc_html_e( 'API Provider', 'crypto' ); ?></label></th>
 									<td>
-										<div class="api-provider-options">
-											<div class="api-provider-option">
-												<input type="radio" id="provider_dscroll" name="crypto_api_provider" value="dscroll" <?php checked( $api_provider, 'dscroll' ); ?> />
-												<label for="provider_dscroll">
-													<span class="provider-title"><?php esc_html_e( 'DScroll API', 'crypto' ); ?></span>
-													<span class="provider-badge"><?php esc_html_e( 'Default', 'crypto' ); ?></span>
-												</label>
-											</div>
-											<div class="api-provider-option">
-												<input type="radio" id="provider_coinmarketcap" name="crypto_api_provider" value="coinmarketcap" <?php checked( $api_provider, 'coinmarketcap' ); ?> />
-												<label for="provider_coinmarketcap">
-													<span class="provider-title"><?php esc_html_e( 'CoinMarketCap API', 'crypto' ); ?></span>
-												</label>
-											</div>
+										<div class="crypto-segmented-control">
+											<input type="radio" id="provider_dscroll" name="crypto_api_provider" value="dscroll" <?php checked( $api_provider, 'dscroll' ); ?> />
+											<label for="provider_dscroll"><?php esc_html_e( 'DScroll API', 'crypto' ); ?></label>
+
+											<input type="radio" id="provider_coinmarketcap" name="crypto_api_provider" value="coinmarketcap" <?php checked( $api_provider, 'coinmarketcap' ); ?> />
+											<label for="provider_coinmarketcap"><?php esc_html_e( 'CoinMarketCap API', 'crypto' ); ?></label>
 										</div>
 										<p class="description">
 											<?php esc_html_e( 'DScroll API is active by default and does not require an API key. For maximum stability and accurate live information, we encourage getting a free CoinMarketCap API key.', 'crypto' ); ?>

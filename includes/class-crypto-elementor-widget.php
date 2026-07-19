@@ -138,12 +138,14 @@ class Crypto_Elementor_Widget extends \Elementor\Widget_Base {
 
 		if ( class_exists( 'Crypto_Shortcode' ) ) {
 			$shortcode = new Crypto_Shortcode();
-			echo $shortcode->render_shortcode(
-				array(
-					'symbol'  => $settings['symbol'],
-					'convert' => $settings['convert'],
-					'layout'  => $settings['layout'],
-					'theme'   => $settings['theme'],
+			echo wp_kses_post(
+				$shortcode->render_shortcode(
+					array(
+						'symbol'  => $settings['symbol'],
+						'convert' => $settings['convert'],
+						'layout'  => $settings['layout'],
+						'theme'   => $settings['theme'],
+					)
 				)
 			);
 		}
